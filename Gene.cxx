@@ -24,7 +24,7 @@ int main(int argc, char ** argv){
 }
 
 
-void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool cumulativ, bool flow){
+void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, , double scalefactor, bool cumulativ, bool flow){
 
   //make a copy of raw_map
   map<int,double> raw_infomap_copy = raw_infomap;
@@ -61,7 +61,7 @@ void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool
       if (cumulativ)
         val_info += prev_val_info;
 
-      FCO_infomap.insert(pair<int, double>(it2->first/12, val_info));
+      FCO_infomap.insert(pair<int, double>(it2->first/12, val_info/scalefactor));
 
       prev_val_info = val_info;
     }
