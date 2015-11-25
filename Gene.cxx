@@ -24,7 +24,7 @@ int main(int argc, char ** argv){
 }
 
 
-void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap,double scalefactor , double scalefactor, bool cumulativ, bool flow){
+void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, double scalefactor, bool cumulativ, bool flow){
 
   //make a copy of raw_map
   map<int,double> raw_infomap_copy = raw_infomap;
