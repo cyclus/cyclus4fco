@@ -410,7 +410,7 @@ void   PrintoutFile(){
   Output << "FreshFuel_LWR_A\tFreshFuel_LWR_B\tFreshFuel_SFR_A\tFreshFuel_SFR_B\t";
   Output << "Separation_LWR\tSeparation_SFR_A\tSeparation_SFR_B\t";
   Output << "Cooling_LWR_A\tCooling_LWR_B\tCooling_SFR_A\tCooling_SFR_B\t";
-  Output << "Separation_LWR_A\tSeparation_LWR_B\tSeparation_SFR_A\tSeparation_SFR_B\t";
+  Output << "Storage_LWR_A\tStorage_LWR_B\tStorage_SFR_A\tStorage_SFR_B\t";
   Output << "EnrichFeed\tEnrichSWU";
   Output << endl;
 
