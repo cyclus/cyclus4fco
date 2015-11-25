@@ -190,7 +190,7 @@ void ReadReactorFlow(){
   system(Command.c_str());
 
   FillInfo("LWR_A.txt", raw_Flow_LWR_A);
-  FormFCOmap(raw_Flow_LWR_A, FCO_Flow_LWR_A, true);
+  FormFCOmap(raw_Flow_LWR_A, FCO_Flow_LWR_A,false, true);
   Command = "rm -f LWR_A.txt";
   system(Command.c_str());
 
@@ -200,7 +200,7 @@ void ReadReactorFlow(){
   system(Command.c_str());
 
   FillInfo("LWR_B.txt", raw_Flow_LWR_B);
-  FormFCOmap(raw_Flow_LWR_B, FCO_Flow_LWR_B, true);
+  FormFCOmap(raw_Flow_LWR_B, FCO_Flow_LWR_B,false, true);
   Command = "rm -f LWR_B.txt";
   system(Command.c_str());
 
@@ -210,7 +210,7 @@ void ReadReactorFlow(){
   system(Command.c_str());
 
   FillInfo("SFR_A.txt", raw_Flow_SFR_A);
-  FormFCOmap(raw_Flow_SFR_A, FCO_Flow_SFR_A, true);
+  FormFCOmap(raw_Flow_SFR_A, FCO_Flow_SFR_A,false, true);
   Command = "rm -f SFR_A.txt";
   system(Command.c_str());
 
@@ -220,7 +220,7 @@ void ReadReactorFlow(){
   system(Command.c_str());
 
   FillInfo("SFR_B.txt", raw_Flow_SFR_B);
-  FormFCOmap(raw_Flow_SFR_B, FCO_Flow_SFR_B, true);
+  FormFCOmap(raw_Flow_SFR_B, FCO_Flow_SFR_B,false, true);
   Command = "rm -f SFR_B.txt";
   system(Command.c_str());
 
@@ -239,7 +239,7 @@ void ReadSeparationFlow(){
   system(Command.c_str());
 
   FillInfo("LWR_separations.txt", raw_Separation_LWR);
-  FormFCOmap(raw_Separation_LWR, FCO_Separation_LWR, true);
+  FormFCOmap(raw_Separation_LWR, FCO_Separation_LWR,false, true);
   Command = "rm -f LWR_separations.txt";
   system(Command.c_str());
 
@@ -249,7 +249,7 @@ void ReadSeparationFlow(){
   system(Command.c_str());
 
   FillInfo("SFR_A_separations.txt", raw_Separation_SFR_A);
-  FormFCOmap(raw_Separation_SFR_A, FCO_Separation_SFR_A, true);
+  FormFCOmap(raw_Separation_SFR_A, FCO_Separation_SFR_A,false, true);
   Command = "rm -f SFR_A_separations.txt";
   system(Command.c_str());
 
@@ -259,7 +259,7 @@ void ReadSeparationFlow(){
   system(Command.c_str());
 
   FillInfo("SFR_B_separations.txt", raw_Separation_SFR_B);
-  FormFCOmap(raw_Separation_SFR_B, FCO_Separation_SFR_B, true);
+  FormFCOmap(raw_Separation_SFR_B, FCO_Separation_SFR_B,false, true);
   Command = "rm -f SFR_B_separations.txt";
   system(Command.c_str());
 
@@ -374,7 +374,7 @@ void ReadEnrichFeed(){
   system(Command.c_str());
 
   FillInfo("TimeSeriesEnrichmentFeed.txt", raw_EnrichFeed, 2, 3 ,4);
-  FormFCOmap(raw_EnrichFeed, FCO_EnrichFeed, true);
+  FormFCOmap(raw_EnrichFeed, FCO_EnrichFeed, true, true);
   Command = "rm -f TimeSeriesEnrichmentFeed.txt";
   system(Command.c_str());
 
@@ -392,7 +392,7 @@ void ReadEnrichSWU(){
   system(Command.c_str());
 
   FillInfo("TimeSeriesEnrichmentSWU.txt", raw_EnrichSWU, 2, 3 ,4);
-  FormFCOmap(raw_EnrichSWU, FCO_EnrichSWU, true);
+  FormFCOmap(raw_EnrichSWU, FCO_EnrichSWU, true, true);
   Command = "rm -f TimeSeriesEnrichmentSWU.txt";
   system(Command.c_str());
 
