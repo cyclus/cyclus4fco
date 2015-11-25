@@ -75,10 +75,10 @@ map<int,double> raw_Storage_LWR_B;
 map<int,double> raw_Storage_SFR_A;
 map<int,double> raw_Storage_SFR_B;
 
-map<int,double> raw_Cooling_LWR_A;
-map<int,double> raw_Cooling_LWR_B;
-map<int,double> raw_Cooling_SFR_A;
-map<int,double> raw_Cooling_SFR_B;
+map<int,double> raw_cooling_LWR_A;
+map<int,double> raw_cooling_LWR_B;
+map<int,double> raw_cooling_SFR_A;
+map<int,double> raw_cooling_SFR_B;
 
 map<int,double> raw_EnrichFeed;
 map<int,double> raw_EnrichSWU;
@@ -103,10 +103,10 @@ map<int,double> FCO_Storage_LWR_B;
 map<int,double> FCO_Storage_SFR_A;
 map<int,double> FCO_Storage_SFR_B;
 
-map<int,double> FCO_Cooling_LWR_A;
-map<int,double> FCO_Cooling_LWR_B;
-map<int,double> FCO_Cooling_SFR_A;
-map<int,double> FCO_Cooling_SFR_B;
+map<int,double> FCO_cooling_LWR_A;
+map<int,double> FCO_cooling_LWR_B;
+map<int,double> FCO_cooling_SFR_A;
+map<int,double> FCO_cooling_SFR_B;
 
 map<int,double> FCO_EnrichFeed;
 map<int,double> FCO_EnrichSWU;
