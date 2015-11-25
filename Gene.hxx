@@ -1,6 +1,3 @@
-#include <ZAI.hxx>
-#include <TGraph.h>
-#include <TGraph.h>
 
 #include <vector>
 #include <stdio.h>
@@ -50,9 +47,14 @@ void ReadStorageInv();
 void ReadCoolingInv();
 void ReadEnrichFeed();
 void ReadEnrichSWU();
+void PrintoutFile();
+
+
+double get_val_at(int i, map<int,double> my_map);
+
 
 int time_max = 0;
-int time_min = 999999999999999;
+int time_min = 9999999;
 
 map<int,double> raw_Energy_LWR_A;
 map<int,double> raw_Energy_LWR_B;

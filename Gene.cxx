@@ -24,7 +24,7 @@ int main(int argc, char ** argv){
 }
 
 
-void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool flow = false){
+void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool flow){
 
   //make a copy of raw_map
   map<int,double> raw_infomap_copy = raw_infomap;
@@ -32,29 +32,29 @@ void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool
 
   //sum the annual flow
   if (flow) {
-    for( it = raw_infomap.begin; it != raw_infomap.end; it++){
-      if(it.first%12 != 0){
+    for( it = raw_infomap.begin(); it != raw_infomap.end(); it++){
+      if(it->first%12 != 0){
 
         pair<map<int,double>::iterator,bool> ret;
 
-        ret = raw_infomap.insert( it);
+        ret = raw_infomap.insert( pair<int, double>(it->first, it->second));
         if(!(ret.second))
-          ret.first.second += it.second;
+          ret.first->second += it->second;
 
       }
     }
   }
 
   // push the annual flow in the FCO map
-  for( it = raw_infomap_copy.begin; it != raw_infomap_copy.end; it++){
+  for( it = raw_infomap_copy.begin(); it != raw_infomap_copy.end(); it++){
 
-    if(it.first%12 == 0)
-      FCO_infomap.insert(it);
+    if(it->first%12 == 0)
+      FCO_infomap.insert(pair<int, double>(it->first, it->second));
 
-    if (it.first < time_min)
-      time_min = it.first;
-    if (it.first > time_max)
-      time_max = it.first;
+    if (it->first < time_min)
+      time_min = it->first;
+    if (it->first > time_max)
+      time_max = it->first;
 
   }
 
@@ -66,10 +66,10 @@ void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool
 void FillInfo(string filename, map<int,double>& raw_infomap, int timecol, int infocol, int colnumb){
 
 
-  ifstream f_Info(filename.c_srt());
+  ifstream f_Info(filename.c_str());
 
   if (!f_Info.is_open()){
-    cout << "something wrong with cyan, no file: " << filename << endl:
+    cout << "something wrong with cyan, no file: " << filename << endl;
     exit(1);
   }
 
@@ -100,8 +100,8 @@ void FillInfo(string filename, map<int,double>& raw_infomap, int timecol, int in
     pair<map<int,double>::iterator,bool> ret;
 
     ret = raw_infomap.insert( pair<int, double> (timestep, info));
-    if (ret.second = false) {
-      cout << "Pb reading the info file: " << filename << "...template should have change : 2 timestep are identical" << emdl;
+    if (ret.second == false) {
+      cout << "Pb reading the info file: " << filename << "...template should have change : 2 timestep are identical" << endl;
       exit(1);
     }
   }while (!f_Info.eof());
@@ -121,7 +121,7 @@ void ReadEnergy(){
 
 
   //reactor LWR_A
-  string Command = "cyan -db cyclus.sqlite power -proto=LWR_A > Energy_LWR_A.txt;"
+  string Command = "cyan -db cyclus.sqlite power -proto=LWR_A > Energy_LWR_A.txt;";
   system(Command.c_str());
 
   FillInfo("Energy_LWR_A.txt", raw_Energy_LWR_A);
@@ -131,7 +131,7 @@ void ReadEnergy(){
 
 
   //reactor LWR_B
-  string Command = "cyan -db cyclus.sqlite power -proto=LWR_B > Energy_LWR_B.txt;"
+  Command = "cyan -db cyclus.sqlite power -proto=LWR_B > Energy_LWR_B.txt;";
   system(Command.c_str());
 
   FillInfo("Energy_LWR_B.txt", raw_Energy_LWR_B);
@@ -141,7 +141,7 @@ void ReadEnergy(){
 
 
   //reactor SFR_A
-  string Command = "cyan -db cyclus.sqlite power -proto=SFR_A > Energy_SFR_A.txt;"
+  Command = "cyan -db cyclus.sqlite power -proto=SFR_A > Energy_SFR_A.txt;";
   system(Command.c_str());
 
   FillInfo("Energy_SFR_A.txt", raw_Energy_SFR_A);
@@ -151,7 +151,7 @@ void ReadEnergy(){
 
 
   //reactor SFR_B
-  string Command = "cyan -db cyclus.sqlite power -proto=SFR_B > Energy_SFR_B.txt"
+  Command = "cyan -db cyclus.sqlite power -proto=SFR_B > Energy_SFR_B.txt";
   system(Command.c_str());
 
   FillInfo("Energy_SFR_B.txt", raw_Energy_SFR_B);
@@ -170,7 +170,7 @@ void ReadReactorFlow(){
 
 
   //reactor LWR_A
-  string Command = "cyan -db cyclus.sqlite flow -to lwr_A > LWR_A.txt"
+  string Command = "cyan -db cyclus.sqlite flow -to lwr_A > LWR_A.txt";
   system(Command.c_str());
 
   FillInfo("LWR_A.txt", raw_Flow_LWR_A);
@@ -180,7 +180,7 @@ void ReadReactorFlow(){
 
 
   //reactor LWR_B
-  string Command = "cyan -db cyclus.sqlite flow -to lwr_B > LWR_B.txt"
+  Command = "cyan -db cyclus.sqlite flow -to lwr_B > LWR_B.txt";
   system(Command.c_str());
 
   FillInfo("LWR_B.txt", raw_Flow_LWR_B);
@@ -190,7 +190,7 @@ void ReadReactorFlow(){
 
 
   //reactor SFR_A
-  string Command = "cyan -db cyclus.sqlite flow -to SFR_A > SFR_A.txt"
+  Command = "cyan -db cyclus.sqlite flow -to SFR_A > SFR_A.txt";
   system(Command.c_str());
 
   FillInfo("SFR_A.txt", raw_Flow_SFR_A);
@@ -200,7 +200,7 @@ void ReadReactorFlow(){
 
 
   //reactor SFR_B
-  string Command = "cyan -db cyclus.sqlite flow -to SFR_B > SFR_B.txt"
+  Command = "cyan -db cyclus.sqlite flow -to SFR_B > SFR_B.txt";
   system(Command.c_str());
 
   FillInfo("SFR_B.txt", raw_Flow_SFR_B);
@@ -219,7 +219,7 @@ void ReadSeparationFlow(){
 
 
   //reactor LWR
-  string Command = "cyan -db cyclus.sqlite flow -to LWR_separations > LWR_separations.txt"
+  string Command = "cyan -db cyclus.sqlite flow -to LWR_separations > LWR_separations.txt";
   system(Command.c_str());
 
   FillInfo("LWR_separations.txt", raw_Separation_LWR);
@@ -229,7 +229,7 @@ void ReadSeparationFlow(){
 
 
   //reactor SFR_A
-  string Command = "cyan -db cyclus.sqlite flow -to SFR_A_separations > SFR_A_separations.txt"
+  Command = "cyan -db cyclus.sqlite flow -to SFR_A_separations > SFR_A_separations.txt";
   system(Command.c_str());
 
   FillInfo("SFR_A_separations.txt", raw_Separation_SFR_A);
@@ -239,7 +239,7 @@ void ReadSeparationFlow(){
 
 
   //reactor SFR_B
-  string Command = "cyan -db cyclus.sqlite flow -to SFR_B_separations > SFR_B_separations.txt"
+  Command = "cyan -db cyclus.sqlite flow -to SFR_B_separations > SFR_B_separations.txt";
   system(Command.c_str());
 
   FillInfo("SFR_B_separations.txt", raw_Separation_SFR_B);
@@ -258,7 +258,7 @@ void ReadStorageInv(){
 
 
   //reactor LWR_A
-  string Command = "cyan -db cyclus.sqlite inv LWR_storage_A > LWR_storage_A.txt"
+  string Command = "cyan -db cyclus.sqlite inv LWR_storage_A > LWR_storage_A.txt";
   system(Command.c_str());
 
   FillInfo("LWR_storage_A.txt", raw_Storage_LWR_A);
@@ -268,7 +268,7 @@ void ReadStorageInv(){
 
 
   //reactor LWR_B
-  string Command = "cyan -db cyclus.sqlite inv LWR_storage_B > LWR_storage_B.txt"
+  Command = "cyan -db cyclus.sqlite inv LWR_storage_B > LWR_storage_B.txt";
   system(Command.c_str());
 
   FillInfo("LWR_storage_B.txt", raw_Storage_LWR_B);
@@ -278,7 +278,7 @@ void ReadStorageInv(){
 
 
   //reactor SFR_A
-  string Command = "cyan -db cyclus.sqlite inv SFR_A_storage > SFR_A_storage.txt"
+  Command = "cyan -db cyclus.sqlite inv SFR_A_storage > SFR_A_storage.txt";
   system(Command.c_str());
 
   FillInfo("SFR_A_storage.txt", raw_Storage_SFR_A);
@@ -288,7 +288,7 @@ void ReadStorageInv(){
 
 
   //reactor SFR_B
-  string Command = " cyan -db cyclus.sqlite inv SFR_B_storage > SFR_B_storage.txt"
+  Command = " cyan -db cyclus.sqlite inv SFR_B_storage > SFR_B_storage.txt";
   system(Command.c_str());
 
   FillInfo("SFR_B_storage.txt", raw_Storage_SFR_B);
@@ -307,7 +307,7 @@ void ReadCoolingInv(){
 
 
   //reactor LWR_A
-  string Command = "cyan -db cyclus.sqlite inv LWR_Cooling_A > LWR_Cooling_A.txt"
+  string Command = "cyan -db cyclus.sqlite inv LWR_Cooling_A > LWR_Cooling_A.txt";
   system(Command.c_str());
 
   FillInfo("LWR_Cooling_A.txt", raw_Cooling_LWR_A);
@@ -317,7 +317,7 @@ void ReadCoolingInv(){
 
 
   //reactor LWR_B
-  string Command = "cyan -db cyclus.sqlite inv LWR_Cooling_B > LWR_Cooling_B.txt"
+  Command = "cyan -db cyclus.sqlite inv LWR_Cooling_B > LWR_Cooling_B.txt";
   system(Command.c_str());
 
   FillInfo("LWR_Cooling_B.txt", raw_Cooling_LWR_B);
@@ -327,7 +327,7 @@ void ReadCoolingInv(){
 
 
   //reactor SFR_A
-  string Command = "cyan -db cyclus.sqlite inv SFR_A_Cooling > SFR_A_Cooling.txt"
+  Command = "cyan -db cyclus.sqlite inv SFR_A_Cooling > SFR_A_Cooling.txt";
   system(Command.c_str());
 
   FillInfo("SFR_A_Cooling.txt", raw_Cooling_SFR_A);
@@ -337,7 +337,7 @@ void ReadCoolingInv(){
 
 
   //reactor SFR_B
-  string Command = " cyan -db cyclus.sqlite inv SFR_B_Cooling > SFR_B_Cooling.txt"
+  Command = " cyan -db cyclus.sqlite inv SFR_B_Cooling > SFR_B_Cooling.txt";
   system(Command.c_str());
 
   FillInfo("SFR_B_Cooling.txt", raw_Cooling_SFR_B);
@@ -354,7 +354,7 @@ void ReadCoolingInv(){
 void ReadEnrichFeed(){
 
 
-  string Command = "cyan -db cyclus.sqlite table TimeSeriesEnrichmentFeed > TimeSeriesEnrichmentFeed.txt"
+  string Command = "cyan -db cyclus.sqlite table TimeSeriesEnrichmentFeed > TimeSeriesEnrichmentFeed.txt";
   system(Command.c_str());
 
   FillInfo("TimeSeriesEnrichmentFeed.txt", raw_EnrichFeed, 2, 3 ,4);
@@ -372,7 +372,7 @@ void ReadEnrichFeed(){
 void ReadEnrichSWU(){
 
 
-  string Command = "cyan -db cyclus.sqlite table TimeSeriesEnrichmentSWU > TimeSeriesEnrichmentSWU.txt"
+  string Command = "cyan -db cyclus.sqlite table TimeSeriesEnrichmentSWU > TimeSeriesEnrichmentSWU.txt";
   system(Command.c_str());
 
   FillInfo("TimeSeriesEnrichmentSWU.txt", raw_EnrichSWU, 2, 3 ,4);
@@ -386,17 +386,17 @@ void ReadEnrichSWU(){
 double get_val_at(int i, map<int,double> my_map){
 
   map<int,double>::iterator it =  my_map.find(i);
-  if( it== my_map.end)
+  if( it== my_map.end())
     return 0;
   else
-    return it.second;
+    return it->second;
 
 }
 
 
 void   PrintoutFile(){
 
-  ofstream Output(FCO_Output.txt);
+  ofstream Output("FCO_Output.txt");
 
   Output << "Time ";
   Output << "Energy_LWR_A Energy_LWR_B Energy_SFR_A Energy_SFR_B ";
@@ -439,6 +439,6 @@ void   PrintoutFile(){
 
 /*
  
- g++ Gene.cxx `root-config --cflags` `root-config --libs` -I ./ PuEquiv.o
+ g++ Gene.cxx
  
  */
