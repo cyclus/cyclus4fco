@@ -24,7 +24,7 @@ int main(int argc, char ** argv){
 }
 
 
-void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool flow){
+void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool cumulativ, bool flow){
 
   //make a copy of raw_map
   map<int,double> raw_infomap_copy = raw_infomap;
@@ -50,11 +50,21 @@ void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool
   }
 
   // push the annual flow in the FCO map
+  double prev_val_info = 0;
+
   for( it2 = raw_infomap_copy.begin(); it2 != raw_infomap_copy.end(); it2++){
 
-    if(it2->first%12 == 0)
-      FCO_infomap.insert(pair<int, double>(it2->first/12, it2->second));
+    if(it2->first%12 == 0){
 
+      double val_info = it2->second;
+
+      if (cumulativ)
+        val_info += prev_val_info;
+
+      FCO_infomap.insert(pair<int, double>(it2->first/12, val_info));
+
+      prev_val_info = val_info;
+    }
     if (it2->first < time_min)
       time_min = it2->first;
 

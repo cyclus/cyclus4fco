@@ -35,7 +35,7 @@ string itof(double num)
 }
 
 void FillInfo(string filename, map<int,double>& raw_infomap, int timecol = 0, int infocol = 1, int colnumb = 2);
-void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool flow = false);
+void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool cumulativ = false, bool flow = false);
 
 
 int init_year = 2015;
