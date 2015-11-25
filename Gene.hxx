@@ -51,35 +51,61 @@ void ReadCoolingInv();
 void ReadEnrichFeed();
 void ReadEnrichSWU();
 
-
+int time_max = 0;
+int time_min = 999999999999999;
 
 map<int,double> raw_Energy_LWR_A;
 map<int,double> raw_Energy_LWR_B;
 map<int,double> raw_Energy_SFR_A;
 map<int,double> raw_Energy_SFR_B;
 
-
 map<int,double> raw_Flow_LWR_A;
 map<int,double> raw_Flow_LWR_B;
 map<int,double> raw_Flow_SFR_A;
 map<int,double> raw_Flow_SFR_B;
 
-
 map<int,double> raw_Separation_LWR;
 map<int,double> raw_Separation_SFR_A;
 map<int,double> raw_Separation_SFR_B;
-
 
 map<int,double> raw_Storage_LWR_A;
 map<int,double> raw_Storage_LWR_B;
 map<int,double> raw_Storage_SFR_A;
 map<int,double> raw_Storage_SFR_B;
 
-
 map<int,double> raw_Cooling_LWR_A;
 map<int,double> raw_Cooling_LWR_B;
 map<int,double> raw_Cooling_SFR_A;
 map<int,double> raw_Cooling_SFR_B;
 
-
 map<int,double> raw_EnrichFeed;
+map<int,double> raw_EnrichSWU;
+
+
+map<int,double> FCO_Energy_LWR_A;
+map<int,double> FCO_Energy_LWR_B;
+map<int,double> FCO_Energy_SFR_A;
+map<int,double> FCO_Energy_SFR_B;
+
+map<int,double> FCO_Flow_LWR_A;
+map<int,double> FCO_Flow_LWR_B;
+map<int,double> FCO_Flow_SFR_A;
+map<int,double> FCO_Flow_SFR_B;
+
+map<int,double> FCO_Separation_LWR;
+map<int,double> FCO_Separation_SFR_A;
+map<int,double> FCO_Separation_SFR_B;
+
+map<int,double> FCO_Storage_LWR_A;
+map<int,double> FCO_Storage_LWR_B;
+map<int,double> FCO_Storage_SFR_A;
+map<int,double> FCO_Storage_SFR_B;
+
+map<int,double> FCO_Cooling_LWR_A;
+map<int,double> FCO_Cooling_LWR_B;
+map<int,double> FCO_Cooling_SFR_A;
+map<int,double> FCO_Cooling_SFR_B;
+
+map<int,double> FCO_EnrichFeed;
+map<int,double> FCO_EnrichSWU;
+
