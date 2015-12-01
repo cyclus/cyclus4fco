@@ -12,19 +12,34 @@
 int main(int argc, char ** argv){
 
   ReadEnergy();
+  ReadDeployed();
+  Readbuilt();
   ReadReactorFlow();
   ReadSeparationFlow();
   ReadCoolingInv();
   ReadStorageInv();
   ReadEnrichFeed();
   ReadEnrichSWU();
+  ReadStorage();
+
+  ComputeRetiredFacility(raw_Deployed_LWR_A, raw_built_LWR_A, raw_Retired_LWR_A);
+  ComputeRetiredFacility(raw_Deployed_LWR_B, raw_built_LWR_B, raw_Retired_LWR_B);
+  ComputeRetiredFacility(raw_Deployed_SFR_A, raw_built_SFR_A, raw_Retired_SFR_A);
+  ComputeRetiredFacility(raw_Deployed_SFR_B, raw_built_SFR_B, raw_Retired_SFR_B);
+
+  FormFCOmap(raw_Retired_LWR_A, FCO_Retired_LWR_A, false, true, 1);
+  FormFCOmap(raw_Retired_LWR_B, FCO_Retired_LWR_B, false, true, 1);
+  FormFCOmap(raw_Retired_SFR_A, FCO_Retired_SFR_A, false, true, 1./0.4);
+  FormFCOmap(raw_Retired_SFR_B, FCO_Retired_SFR_B, false, true, 1./0.4);
+
+
 
   PrintoutFile();
 
 }
 
 
-void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, double scalefactor, bool cumulativ, bool flow){
+void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool cumulativ, bool flow, double scalefactor){
 
   //make a copy of raw_map
   map<int,double> raw_infomap_copy = raw_infomap;
@@ -115,9 +130,10 @@ void FillInfo(string filename, map<int,double>& raw_infomap, int timecol, int in
     if(timestep != -1){
       pair<map<int,double>::iterator,bool> ret;
       ret = raw_infomap.insert( pair<int, double> (timestep, info));
+
+      //      cout << timestep << " " << info << endl;
       if (ret.second == false) {
-        cout << "Pb reading the info file: " << filename << "...template should have change : 2 timestep are identical " << timestep << endl;
-        exit(1);
+        ret.first->second += info;
       }
     }
   }while (!f_Info.eof());
@@ -126,9 +142,6 @@ void FillInfo(string filename, map<int,double>& raw_infomap, int timecol, int in
 
 
 }
-
-
-
 
 /* ------------------------------------------------------------------------------- */
 /* ---------------------------------  Energy ------------------------------------- */
@@ -142,6 +155,7 @@ void ReadEnergy(){
 
   FillInfo("Energy_LWR_A.txt", raw_Energy_LWR_A);
   FormFCOmap(raw_Energy_LWR_A, FCO_Energy_LWR_A);
+  FormFCOmap(raw_Energy_LWR_A, FCO_Capacity_LWR_A, false, false, 0.9*1000);
   Command = "rm -f Energy_LWR_A.txt";
   system(Command.c_str());
 
@@ -152,6 +166,7 @@ void ReadEnergy(){
 
   FillInfo("Energy_LWR_B.txt", raw_Energy_LWR_B);
   FormFCOmap(raw_Energy_LWR_B, FCO_Energy_LWR_B);
+  FormFCOmap(raw_Energy_LWR_B, FCO_Capacity_LWR_B, false, false, 0.9*1000);
   Command = "rm -f Energy_LWR_B.txt";
   system(Command.c_str());
 
@@ -162,6 +177,7 @@ void ReadEnergy(){
 
   FillInfo("Energy_SFR_A.txt", raw_Energy_SFR_A);
   FormFCOmap(raw_Energy_SFR_A, FCO_Energy_SFR_A);
+  FormFCOmap(raw_Energy_SFR_A, FCO_Capacity_SFR_A, false, false, 0.9*1000);
   Command = "rm -f Energy_SFR_A.txt";
   system(Command.c_str());
 
@@ -172,11 +188,111 @@ void ReadEnergy(){
 
   FillInfo("Energy_SFR_B.txt", raw_Energy_SFR_B);
   FormFCOmap(raw_Energy_SFR_B, FCO_Energy_SFR_B);
+  FormFCOmap(raw_Energy_SFR_B, FCO_Capacity_SFR_B, false, false, 0.9*1000);
   Command = "rm -f Energy_SFR_B.txt";
   system(Command.c_str());
 
 
 }
+
+
+
+/* ------------------------------------------------------------------------------- */
+/* ---------------------------------  Reactor ------------------------------------- */
+/* ------------------------------------------------------------------------------- */
+void Readbuilt(){
+
+
+  //reactor LWR_A
+  string Command = "cyan -db cyan -db cyclus.sqlite built LWR_A > LWR_A.txt";
+  system(Command.c_str());
+
+  FillInfo("LWR_A.txt", raw_built_LWR_A);
+  FormFCOmap(raw_built_LWR_A, FCO_built_LWR_A, false, true, 1);
+  Command = "rm -f LWR_A.txt";
+  system(Command.c_str());
+
+
+  //reactor LWR_B
+  Command = "cyan -db cyan -db cyclus.sqlite built LWR_B > LWR_B.txt";
+  system(Command.c_str());
+
+  FillInfo("LWR_B.txt", raw_built_LWR_B);
+  FormFCOmap(raw_built_LWR_B, FCO_built_LWR_B, false, true, 1);
+  Command = "rm -f LWR_B.txt";
+  system(Command.c_str());
+
+
+  //reactor SFR_A
+  Command = "cyan -db cyan -db cyclus.sqlite built SFR_A > SFR_A.txt";
+  system(Command.c_str());
+
+  FillInfo("SFR_A.txt", raw_built_SFR_A);
+  FormFCOmap(raw_built_SFR_A, FCO_built_SFR_A, false, true, 1./0.4);
+  Command = "rm -f SFR_A.txt";
+  system(Command.c_str());
+
+
+  //reactor SFR_B
+  Command = "cyan -db cyan -db cyclus.sqlite built SFR_B > SFR_B.txt";
+  system(Command.c_str());
+
+  FillInfo("SFR_B.txt", raw_built_SFR_B);
+  FormFCOmap(raw_built_SFR_B, FCO_built_SFR_B, false, true, 1./0.4);
+  Command = "rm -f SFR_B.txt";
+  system(Command.c_str());
+
+}
+
+
+
+/* ------------------------------------------------------------------------------- */
+/* ---------------------------------  Reactor ------------------------------------- */
+/* ------------------------------------------------------------------------------- */
+void ReadDeployed(){
+
+
+  //reactor LWR_A
+  string Command = "cyan -db cyan -db cyclus.sqlite deployed LWR_A > LWR_A.txt";
+  system(Command.c_str());
+
+  FillInfo("LWR_A.txt", raw_Deployed_LWR_A);
+  FormFCOmap(raw_Deployed_LWR_A, FCO_Deployed_LWR_A, false, false, 1);
+  Command = "rm -f LWR_A.txt";
+  system(Command.c_str());
+
+
+  //reactor LWR_B
+  Command = "cyan -db cyan -db cyclus.sqlite deployed LWR_B > LWR_B.txt";
+  system(Command.c_str());
+
+  FillInfo("LWR_B.txt", raw_Deployed_LWR_B);
+  FormFCOmap(raw_Deployed_LWR_B, FCO_Deployed_LWR_B, false, false, 1);
+  Command = "rm -f LWR_B.txt";
+  system(Command.c_str());
+
+
+  //reactor SFR_A
+  Command = "cyan -db cyan -db cyclus.sqlite deployed SFR_A > SFR_A.txt";
+  system(Command.c_str());
+
+  FillInfo("SFR_A.txt", raw_Deployed_SFR_A);
+  FormFCOmap(raw_Deployed_SFR_A, FCO_Deployed_SFR_A, false, false, 1./0.4);
+  Command = "rm -f SFR_A.txt";
+  system(Command.c_str());
+
+
+  //reactor SFR_B
+  Command = "cyan -db cyan -db cyclus.sqlite deployed SFR_B > SFR_B.txt";
+  system(Command.c_str());
+
+  FillInfo("SFR_B.txt", raw_Deployed_SFR_B);
+  FormFCOmap(raw_Deployed_SFR_B, FCO_Deployed_SFR_B, false, false, 1./0.4);
+  Command = "rm -f SFR_B.txt";
+  system(Command.c_str());
+
+}
+
 
 
 /* ------------------------------------------------------------------------------- */
@@ -233,14 +349,22 @@ void ReadReactorFlow(){
 /* ------------------------------------------------------------------------------- */
 void ReadSeparationFlow(){
 
-
-  //reactor LWR
-  string Command = "cyan -db cyclus.sqlite flow -to LWR_separations > LWR_separations.txt";
+  //reactor LWR_A
+  string Command = "cyan -db cyclus.sqlite flow -to LWR_separation -commod=UOX_A_spent_stored > LWR_A_separations.txt";
   system(Command.c_str());
 
-  FillInfo("LWR_separations.txt", raw_Separation_LWR);
-  FormFCOmap(raw_Separation_LWR, FCO_Separation_LWR,false, true);
-  Command = "rm -f LWR_separations.txt";
+  FillInfo("LWR_A_separations.txt", raw_Separation_LWR_A);
+  FormFCOmap(raw_Separation_LWR_A, FCO_Separation_LWR_A,false, true);
+  Command = "rm -f LWR_A_separations.txt";
+  system(Command.c_str());
+
+  //reactor LWR_B
+  Command = "cyan -db cyclus.sqlite flow -to LWR_separation -commod=UOX_B_spent_stored > LWR_B_separations.txt";
+  system(Command.c_str());
+
+  FillInfo("LWR_B_separations.txt", raw_Separation_LWR_B);
+  FormFCOmap(raw_Separation_LWR_B, FCO_Separation_LWR_B,false, true);
+  Command = "rm -f LWR_B_separations.txt";
   system(Command.c_str());
 
 
@@ -392,7 +516,7 @@ void ReadEnrichSWU(){
   system(Command.c_str());
 
   FillInfo("TimeSeriesEnrichmentSWU.txt", raw_EnrichSWU, 2, 3 ,4);
-  FormFCOmap(raw_EnrichSWU, FCO_EnrichSWU, true, true);
+  FormFCOmap(raw_EnrichSWU, FCO_EnrichSWU, false, true);
   Command = "rm -f TimeSeriesEnrichmentSWU.txt";
   system(Command.c_str());
 
@@ -411,17 +535,129 @@ double get_val_at(int time, map<int,double> my_map){
 }
 
 
+void ComputeRetiredFacility(map<int,double> deployed_map, map<int,double> built_map, map<int, double>& retired_map){
+
+  map<int,double>::iterator it;
+  double previous_val = deployed_map.begin()->first;
+
+  for( it = deployed_map.begin(); it != deployed_map.end(); it++){
+
+    int built = 0;
+    map<int,double>::iterator it2 = built_map.find(it->first);
+    if (it2 != built_map.end())
+      built = it2->second;
+
+    double retired = it->second - previous_val - built;
+
+    retired_map.insert(pair<int, double>(it->first, (-1)*retired));
+
+    previous_val = it->second;
+
+  }
+
+}
+
+
+
+/* ------------------------------------------------------------------------------- */
+/* ---------------------------------  Storage Inv -------------------------------- */
+/* ------------------------------------------------------------------------------- */
+void ReadStorage(){
+
+  {
+  //reactor LWR_A
+  string Command = "cyan -db cyclus.sqlite inv -nucs=94239 LWR_A_storage > storage_pu.txt";
+  system(Command.c_str());
+
+  FillInfo("storage_pu.txt", raw_Storage_pu);
+  Command = "rm -f storage_pu.txt";
+  system(Command.c_str());
+
+
+  //reactor LWR_B
+  Command = "cyan -db cyclus.sqlite inv -nucs=94239 LWR_B_storage > storage_pu.txt";
+  system(Command.c_str());
+
+  FillInfo("storage_pu.txt", raw_Storage_pu);
+  Command = "rm -f storage_pu.txt";
+  system(Command.c_str());
+
+
+  //reactor SFR_A
+  Command = "cyan -db cyclus.sqlite inv -nucs=94239 SFR_A_storage > storage_pu.txt";
+  system(Command.c_str());
+
+  FillInfo("storage_pu.txt", raw_Storage_pu);
+  Command = "rm -f storage_pu.txt";
+  system(Command.c_str());
+
+
+  //reactor SFR_B
+  Command = " cyan -db cyclus.sqlite inv -nucs=94239 SFR_B_storage > storage_pu.txt";
+  system(Command.c_str());
+
+  FillInfo("storage_pu.txt", raw_Storage_pu);
+  Command = "rm -f storage_pu.txt";
+  system(Command.c_str());
+
+  FormFCOmap(raw_Storage_pu, FCO_Storage_pu);
+  }
+
+  //reactor LWR_A
+  string Command = "cyan -db cyclus.sqlite inv -nucs=95241 LWR_A_storage > storage_MA.txt";
+  system(Command.c_str());
+
+  FillInfo("storage_MA.txt", raw_Storage_MA);
+  Command = "rm -f storage_MA.txt";
+  system(Command.c_str());
+
+
+  //reactor LWR_B
+  Command = "cyan -db cyclus.sqlite inv -nucs=95241 LWR_B_storage > storage_MA.txt";
+  system(Command.c_str());
+
+  FillInfo("storage_MA.txt", raw_Storage_MA);
+  Command = "rm -f storage_MA.txt";
+  system(Command.c_str());
+
+
+  //reactor SFR_A
+  Command = "cyan -db cyclus.sqlite inv -nucs=95241 SFR_A_storage > storage_MA.txt";
+  system(Command.c_str());
+
+  FillInfo("storage_MA.txt", raw_Storage_MA);
+  Command = "rm -f storage_MA.txt";
+  system(Command.c_str());
+
+
+  //reactor SFR_B
+  Command = "cyan -db cyclus.sqlite inv -nucs=95241 SFR_B_storage > storage_MA.txt";
+  system(Command.c_str());
+
+  FillInfo("storage_MA.txt", raw_Storage_MA);
+  Command = "rm -f storage_MA.txt";
+  system(Command.c_str());
+
+  FormFCOmap(raw_Storage_MA, FCO_Storage_MA);
+
+}
+
+
 void   PrintoutFile(){
 
   ofstream Output("FCO_Output.txt");
 
   Output << "Time ";
   Output << "Energy_LWR_A\tEnergy_LWR_B\tEnergy_SFR_A\tEnergy_SFR_B\t";
+  Output << "Capacity_LWR_A\tCapacity_LWR_B\tCapacity_SFR_A\tCapacity_SFR_B\t";
+  Output << "built_LWR_A\tbuilt_LWR_B\tbuilt_SFR_A\tbuilt_SFR_B\t";
   Output << "FreshFuel_LWR_A\tFreshFuel_LWR_B\tFreshFuel_SFR_A\tFreshFuel_SFR_B\t";
-  Output << "Separation_LWR\tSeparation_SFR_A\tSeparation_SFR_B\t";
+  Output << "Separation_LWR_A\tSeparation_LWR_B\tSeparation_SFR_A\tSeparation_SFR_B\t";
   Output << "Cooling_LWR_A\tCooling_LWR_B\tCooling_SFR_A\tCooling_SFR_B\t";
   Output << "Storage_LWR_A\tStorage_LWR_B\tStorage_SFR_A\tStorage_SFR_B\t";
-  Output << "EnrichFeed\tEnrichSWU";
+  Output << "EnrichFeed\tEnrichSWU\t";
+  Output << "retired_LWR_A\tretired_LWR_B\tretired_SFR_A\tretired_SFR_B\t";
+  Output << "stored_Pu\tstored_MA\t";
   Output << endl;
 
   for(int i = time_min/12; i < time_max/12+1; i++){
@@ -430,11 +666,20 @@ void   PrintoutFile(){
     Output << get_val_at(i, FCO_Energy_LWR_B) << " ";
     Output << get_val_at(i, FCO_Energy_SFR_A) << " ";
     Output << get_val_at(i, FCO_Energy_SFR_B) << " ";
+    Output << get_val_at(i, FCO_Capacity_LWR_A) << " ";
+    Output << get_val_at(i, FCO_Capacity_LWR_B) << " ";
+    Output << get_val_at(i, FCO_Capacity_SFR_A) << " ";
+    Output << get_val_at(i, FCO_Capacity_SFR_B) << " ";
+    Output << get_val_at(i, FCO_built_LWR_A) << " ";
+    Output << get_val_at(i, FCO_built_LWR_B) << " ";
+    Output << get_val_at(i, FCO_built_SFR_A) << " ";
+    Output << get_val_at(i, FCO_built_SFR_B) << " ";
     Output << get_val_at(i, FCO_Flow_LWR_A) << " ";
     Output << get_val_at(i, FCO_Flow_LWR_B) << " ";
     Output << get_val_at(i, FCO_Flow_SFR_A) << " ";
     Output << get_val_at(i, FCO_Flow_SFR_B) << " ";
-    Output << get_val_at(i, FCO_Separation_LWR) << " ";
+    Output << get_val_at(i, FCO_Separation_LWR_A) << " ";
+    Output << get_val_at(i, FCO_Separation_LWR_B) << " ";
     Output << get_val_at(i, FCO_Separation_SFR_A) << " ";
     Output << get_val_at(i, FCO_Separation_SFR_B) << " ";
     Output << get_val_at(i, FCO_cooling_LWR_A) << " ";
@@ -446,7 +691,13 @@ void   PrintoutFile(){
     Output << get_val_at(i, FCO_Storage_SFR_A) << " ";
     Output << get_val_at(i, FCO_Storage_SFR_B) << " ";
     Output << get_val_at(i, FCO_EnrichFeed) << " ";
-    Output << get_val_at(i, FCO_EnrichSWU);
+    Output << get_val_at(i, FCO_EnrichSWU) << " ";
+    Output << get_val_at(i, FCO_Retired_LWR_A) << " ";
+    Output << get_val_at(i, FCO_Retired_LWR_B) << " ";
+    Output << get_val_at(i, FCO_Retired_SFR_A) << " ";
+    Output << get_val_at(i, FCO_Retired_SFR_B) << " ";
+    Output << get_val_at(i, FCO_Storage_pu) << " ";
+    Output << get_val_at(i, FCO_Storage_MA) << " ";
     Output << endl;
     
     
