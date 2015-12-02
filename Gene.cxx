@@ -676,6 +676,7 @@ void   PrintoutFile(){
   Output << "EnrichFeed\tEnrichSWU\t";
   Output << "retired_LWR_A\tretired_LWR_B\tretired_SFR_A\tretired_SFR_B\t";
   Output << "stored_Pu\tstored_MA\t";
+  Output << "depleted_U\Recycled_U\t";
   Output << endl;
 
   for(int i = time_min/12; i < time_max/12+1; i++){
@@ -716,6 +717,8 @@ void   PrintoutFile(){
     Output << get_val_at(i, FCO_Retired_SFR_B) << " ";
     Output << get_val_at(i, FCO_Storage_pu) << " ";
     Output << get_val_at(i, FCO_Storage_MA) << " ";
+    Output << get_val_at(i, FCO_Storage_DU) << " ";
+    Output << get_val_at(i, FCO_Storage_RU) << " ";
     Output << endl;
     
     
