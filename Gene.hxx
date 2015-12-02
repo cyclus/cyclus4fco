@@ -107,6 +107,9 @@ map<int,double> raw_EnrichSWU;
 map<int,double> raw_Storage_pu;
 map<int,double> raw_Storage_MA;
 
+map<int,double> raw_Storage_RU;
+map<int,double> raw_Storage_DU;
+
 map<int,double> FCO_Energy_LWR_A;
 map<int,double> FCO_Energy_LWR_B;
 map<int,double> FCO_Energy_SFR_A;
@@ -158,3 +161,5 @@ map<int,double> FCO_EnrichSWU;
 map<int,double> FCO_Storage_pu;
 map<int,double> FCO_Storage_MA;
 
+map<int,double> FCO_Storage_RU;
+map<int,double> FCO_Storage_DU;

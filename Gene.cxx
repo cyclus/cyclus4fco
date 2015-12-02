@@ -435,6 +435,24 @@ void ReadStorageInv(){
   FormFCOmap(raw_Storage_SFR_B, FCO_Storage_SFR_B);
   Command = "rm -f SFR_B_storage.txt";
   system(Command.c_str());
+  
+  //RU Storage
+  Command = " cyan -db cyclus.sqlite inv RU_Storage > RU_storage.txt";
+  system(Command.c_str());
+
+  FillInfo("RU_storage.txt", raw_Storage_RU);
+  FormFCOmap(raw_Storage_RU, FCO_Storage_RU);
+  Command = "rm -f RU_storage.txt";
+  system(Command.c_str());
+  
+  //DU Storage
+  Command = " cyan -db cyclus.sqlite inv DU_Storage > DU_storage.txt";
+  system(Command.c_str());
+
+  FillInfo("DU_storage.txt", raw_Storage_DU);
+  FormFCOmap(raw_Storage_DU, FCO_Storage_DU);
+  Command = "rm -f DU_storage.txt";
+  system(Command.c_str());
 
 
 }
