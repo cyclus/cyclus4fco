@@ -34,11 +34,12 @@ string itof(double num)
   return os.str();
 }
 
-void FillInfo(string filename, map<int,double>& raw_infomap, int timecol = 0, int infocol = 1, int colnumb = 2);
+void FillInfo(string filename, map<int,double>& raw_infomap, int timecol = 0, int infocol = 1, int colnumb = 2, bool cumulativ = false);
 void FormFCOmap(map<int,double>& raw_infomap, map<int,double>& FCO_infomap, bool cumulativ = false, bool flow = false, double scalefactor = 1000);
+void Read(string info, string facility, map<int, double>& map2fill,  int nuclei =-1, bool cumulativ = false);
 
 
-int init_year = 2015;
+int init_year = 0;
 
 void ReadEnergy();
 void ReadDeployed();
@@ -57,109 +58,19 @@ void PrintoutFile();
 double get_val_at(int i, map<int,double> my_map);
 
 
-int time_max = 0;
-int time_min = 9999999;
+int time_max = 1200;
+int time_min = 0;
 
+string filename;
 
-map<int,double> raw_Energy_LWR_A;
-map<int,double> raw_Energy_LWR_B;
-map<int,double> raw_Energy_SFR_A;
-map<int,double> raw_Energy_SFR_B;
+map<int, double> reactorIn;
+map<int, double> reactorOut;
 
-map<int,double> raw_built_LWR_A;
-map<int,double> raw_built_LWR_B;
-map<int,double> raw_built_SFR_A;
-map<int,double> raw_built_SFR_B;
+map<int, double> stored[17];
 
-map<int,double> raw_Deployed_LWR_A;
-map<int,double> raw_Deployed_LWR_B;
-map<int,double> raw_Deployed_SFR_A;
-map<int,double> raw_Deployed_SFR_B;
-
-map<int,double> raw_Retired_LWR_A;
-map<int,double> raw_Retired_LWR_B;
-map<int,double> raw_Retired_SFR_A;
-map<int,double> raw_Retired_SFR_B;
-
-map<int,double> raw_Flow_LWR_A;
-map<int,double> raw_Flow_LWR_B;
-map<int,double> raw_Flow_SFR_A;
-map<int,double> raw_Flow_SFR_B;
-
-map<int,double> raw_Separation_LWR_A;
-map<int,double> raw_Separation_LWR_B;
-map<int,double> raw_Separation_SFR_A;
-map<int,double> raw_Separation_SFR_B;
-
-map<int,double> raw_Storage_LWR_A;
-map<int,double> raw_Storage_LWR_B;
-map<int,double> raw_Storage_SFR_A;
-map<int,double> raw_Storage_SFR_B;
-
-map<int,double> raw_cooling_LWR_A;
-map<int,double> raw_cooling_LWR_B;
-map<int,double> raw_cooling_SFR_A;
-map<int,double> raw_cooling_SFR_B;
-
-map<int,double> raw_EnrichFeed;
-map<int,double> raw_EnrichSWU;
-
-map<int,double> raw_Storage_pu;
-map<int,double> raw_Storage_MA;
-
-map<int,double> raw_Storage_RU;
-map<int,double> raw_Storage_DU;
-
-map<int,double> FCO_Energy_LWR_A;
-map<int,double> FCO_Energy_LWR_B;
-map<int,double> FCO_Energy_SFR_A;
-map<int,double> FCO_Energy_SFR_B;
-
-map<int,double> FCO_built_LWR_A;
-map<int,double> FCO_built_LWR_B;
-map<int,double> FCO_built_SFR_A;
-map<int,double> FCO_built_SFR_B;
-
-map<int,double> FCO_Deployed_LWR_A;
-map<int,double> FCO_Deployed_LWR_B;
-map<int,double> FCO_Deployed_SFR_A;
-map<int,double> FCO_Deployed_SFR_B;
-
-map<int,double> FCO_Retired_LWR_A;
-map<int,double> FCO_Retired_LWR_B;
-map<int,double> FCO_Retired_SFR_A;
-map<int,double> FCO_Retired_SFR_B;
-
-map<int,double> FCO_Capacity_LWR_A;
-map<int,double> FCO_Capacity_LWR_B;
-map<int,double> FCO_Capacity_SFR_A;
-map<int,double> FCO_Capacity_SFR_B;
-
-map<int,double> FCO_Flow_LWR_A;
-map<int,double> FCO_Flow_LWR_B;
-map<int,double> FCO_Flow_SFR_A;
-map<int,double> FCO_Flow_SFR_B;
-
-map<int,double> FCO_Separation_LWR_A;
-map<int,double> FCO_Separation_LWR_B;
-map<int,double> FCO_Separation_SFR_A;
-map<int,double> FCO_Separation_SFR_B;
-
-map<int,double> FCO_Storage_LWR_A;
-map<int,double> FCO_Storage_LWR_B;
-map<int,double> FCO_Storage_SFR_A;
-map<int,double> FCO_Storage_SFR_B;
-
-map<int,double> FCO_cooling_LWR_A;
-map<int,double> FCO_cooling_LWR_B;
-map<int,double> FCO_cooling_SFR_A;
-map<int,double> FCO_cooling_SFR_B;
-
-map<int,double> FCO_EnrichFeed;
-map<int,double> FCO_EnrichSWU;
-
-map<int,double> FCO_Storage_pu;
-map<int,double> FCO_Storage_MA;
-
-map<int,double> FCO_Storage_RU;
-map<int,double> FCO_Storage_DU;
+int nucleilist[17] = {
+    92234, 92235, 92236, 92238,
+    94238, 94239, 94240, 94241, 94242,
+    95241, 95242, 95243,
+    96242, 96243, 96244, 96245,
+    93237};
