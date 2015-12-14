@@ -224,7 +224,7 @@ double get_val_at(int time, map<int,double> my_map){
 
 void   PrintoutFile(){
 
-    ofstream Output("Output.txt");
+    ofstream Output("Output.csv");
 
     Output << "Time[month],";
     Output << "reactor_In[kg],Reactor_Out[kg],";
