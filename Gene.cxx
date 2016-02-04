@@ -350,7 +350,7 @@ void ReadReactorFlow(){
 void ReadSeparationFlow(){
 
   //reactor LWR_A
-  string Command = "cyan -db cyclus.sqlite flow -to LWR_separation -commod=UOX_A_spent_stored > LWR_A_separations.txt";
+  string Command = "cyan -db cyclus.sqlite flow -to Separation -commod=UOX_A_spent_stored > LWR_A_separations.txt";
   system(Command.c_str());
 
   FillInfo("LWR_A_separations.txt", raw_Separation_LWR_A);
@@ -359,7 +359,7 @@ void ReadSeparationFlow(){
   system(Command.c_str());
 
   //reactor LWR_B
-  Command = "cyan -db cyclus.sqlite flow -to LWR_separation -commod=UOX_B_spent_stored > LWR_B_separations.txt";
+  Command = "cyan -db cyclus.sqlite flow -to Separation -commod=UOX_B_spent_stored > LWR_B_separations.txt";
   system(Command.c_str());
 
   FillInfo("LWR_B_separations.txt", raw_Separation_LWR_B);
@@ -369,7 +369,7 @@ void ReadSeparationFlow(){
 
 
   //reactor SFR_A
-  Command = "cyan -db cyclus.sqlite flow -to SFR_A_separations > SFR_A_separations.txt";
+  Command = "cyan -db cyclus.sqlite flow -to Separation -commod=SFR_A_spent_stored > SFR_A_separations.txt";
   system(Command.c_str());
 
   FillInfo("SFR_A_separations.txt", raw_Separation_SFR_A);
@@ -379,7 +379,7 @@ void ReadSeparationFlow(){
 
 
   //reactor SFR_B
-  Command = "cyan -db cyclus.sqlite flow -to SFR_B_separations > SFR_B_separations.txt";
+  Command = "cyan -db cyclus.sqlite flow -to Separation -commod=SFR_B_spent_stored > SFR_B_separations.txt";
   system(Command.c_str());
 
   FillInfo("SFR_B_separations.txt", raw_Separation_SFR_B);
