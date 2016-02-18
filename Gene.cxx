@@ -161,7 +161,7 @@ void ReadEnergy(){
 
 
   //reactor LWR_B
-  Command = "cyan -db cyclus.sqlite power -proto=LWR_B > Energy_LWR_B.txt;";
+  Command = "cyan -db cyclus.sqlite power -proto=PWR > Energy_LWR_B.txt;";
   system(Command.c_str());
 
   FillInfo("Energy_LWR_B.txt", raw_Energy_LWR_B);
@@ -214,7 +214,7 @@ void Readbuilt(){
 
 
   //reactor LWR_B
-  Command = "cyan -db cyan -db cyclus.sqlite built LWR_B > LWR_B.txt";
+  Command = "cyan -db cyan -db cyclus.sqlite built PWR > LWR_B.txt";
   system(Command.c_str());
 
   FillInfo("LWR_B.txt", raw_built_LWR_B);
@@ -263,7 +263,7 @@ void ReadDeployed(){
 
 
   //reactor LWR_B
-  Command = "cyan -db cyan -db cyclus.sqlite deployed LWR_B > LWR_B.txt";
+  Command = "cyan -db cyan -db cyclus.sqlite deployed PWR > LWR_B.txt";
   system(Command.c_str());
 
   FillInfo("LWR_B.txt", raw_Deployed_LWR_B);
@@ -312,7 +312,7 @@ void ReadReactorFlow(){
 
 
   //reactor LWR_B
-  Command = "cyan -db cyclus.sqlite flow -to LWR_B > LWR_B.txt";
+  Command = "cyan -db cyclus.sqlite flow -to PWR > LWR_B.txt";
   system(Command.c_str());
 
   FillInfo("LWR_B.txt", raw_Flow_LWR_B);
@@ -359,12 +359,12 @@ void ReadSeparationFlow(){
   system(Command.c_str());
 
   //reactor LWR_B
-  Command = "cyan -db cyclus.sqlite flow -to LWR_separation -commod=UOX_B_spent_stored > LWR_B_separations.txt";
+  Command = "cyan -db cyclus.sqlite flow -to PWR_separation -commod=PWR_MOX_spent_stored > LWR_MOX_separations.txt";
   system(Command.c_str());
 
-  FillInfo("LWR_B_separations.txt", raw_Separation_LWR_B);
+  FillInfo("LWR_MOX_separations.txt", raw_Separation_LWR_B);
   FormFCOmap(raw_Separation_LWR_B, FCO_Separation_LWR_B,false, true);
-  Command = "rm -f LWR_B_separations.txt";
+  Command = "rm -f LWR_MOX_separations.txt";
   system(Command.c_str());
 
 
@@ -408,12 +408,12 @@ void ReadStorageInv(){
 
 
   //reactor LWR_B
-  Command = "cyan -db cyclus.sqlite inv LWR_B_storage > LWR_storage_B.txt";
+  Command = "cyan -db cyclus.sqlite inv PWR_storage > PWR_storage.txt";
   system(Command.c_str());
 
-  FillInfo("LWR_storage_B.txt", raw_Storage_LWR_B);
+  FillInfo("PWR_storage.txt", raw_Storage_LWR_B);
   FormFCOmap(raw_Storage_LWR_B, FCO_Storage_LWR_B);
-  Command = "rm -f LWR_storage_B.txt";
+  Command = "rm -f PWR_storage.txt";
   system(Command.c_str());
 
 
@@ -436,15 +436,7 @@ void ReadStorageInv(){
   Command = "rm -f SFR_B_storage.txt";
   system(Command.c_str());
   
-  //RU Storage
-  Command = " cyan -db cyclus.sqlite inv RU_Storage > RU_storage.txt";
-  system(Command.c_str());
 
-  FillInfo("RU_storage.txt", raw_Storage_RU);
-  FormFCOmap(raw_Storage_RU, FCO_Storage_RU);
-  Command = "rm -f RU_storage.txt";
-  system(Command.c_str());
-  
   //DU Storage
   Command = " cyan -db cyclus.sqlite inv DU_Storage > DU_storage.txt";
   system(Command.c_str());
@@ -475,12 +467,12 @@ void ReadCoolingInv(){
 
 
   //reactor LWR_B
-  Command = "cyan -db cyclus.sqlite inv LWR_B_cooling > LWR_cooling_B.txt";
+  Command = "cyan -db cyclus.sqlite inv PWR_cooling > PWR_cooling.txt";
   system(Command.c_str());
 
-  FillInfo("LWR_cooling_B.txt", raw_cooling_LWR_B);
+  FillInfo("PWR_cooling.txt", raw_cooling_LWR_B);
   FormFCOmap(raw_cooling_LWR_B, FCO_cooling_LWR_B);
-  Command = "rm -f LWR_cooling_B.txt";
+  Command = "rm -f PWR_cooling.txt";
   system(Command.c_str());
 
 
@@ -582,81 +574,37 @@ void ComputeRetiredFacility(map<int,double> deployed_map, map<int,double> built_
 /* ------------------------------------------------------------------------------- */
 void ReadStorage(){
 
-  {
-  //reactor LWR_A
-  string Command = "cyan -db cyclus.sqlite inv -nucs=94239 LWR_A_storage > storage_pu.txt";
-  system(Command.c_str());
-
-  FillInfo("storage_pu.txt", raw_Storage_pu);
-  Command = "rm -f storage_pu.txt";
-  system(Command.c_str());
-
+  string Command;
 
   //reactor LWR_B
-  Command = "cyan -db cyclus.sqlite inv -nucs=94239 LWR_B_storage > storage_pu.txt";
+  Command = "cyan -db cyclus.sqlite inv -nucs=94239 PWR_storage_Upu > PWR_storage_Upu.txt";
   system(Command.c_str());
 
-  FillInfo("storage_pu.txt", raw_Storage_pu);
-  Command = "rm -f storage_pu.txt";
-  system(Command.c_str());
-
-
-  //reactor SFR_A
-  Command = "cyan -db cyclus.sqlite inv -nucs=94239 SFR_A_storage > storage_pu.txt";
-  system(Command.c_str());
-
-  FillInfo("storage_pu.txt", raw_Storage_pu);
-  Command = "rm -f storage_pu.txt";
-  system(Command.c_str());
-
-
-  //reactor SFR_B
-  Command = " cyan -db cyclus.sqlite inv -nucs=94239 SFR_B_storage > storage_pu.txt";
-  system(Command.c_str());
-
-  FillInfo("storage_pu.txt", raw_Storage_pu);
-  Command = "rm -f storage_pu.txt";
-  system(Command.c_str());
-
+  FillInfo("PWR_storage_Upu.txt", raw_Storage_pu);
+  Command = "rm -f PWR_storage_Upu.txt";
   FormFCOmap(raw_Storage_pu, FCO_Storage_pu);
-  }
+ system(Command.c_str());
 
-  //reactor LWR_A
-  string Command = "cyan -db cyclus.sqlite inv -nucs=95241 LWR_A_storage > storage_MA.txt";
+  //RU Storage
+  Command = " cyan -db cyclus.sqlite inv -nucs=92238 PWR_storage_Upu > RU_storage.txt";
   system(Command.c_str());
 
-  FillInfo("storage_MA.txt", raw_Storage_MA);
-  Command = "rm -f storage_MA.txt";
-  system(Command.c_str());
-
-
-  //reactor LWR_B
-  Command = "cyan -db cyclus.sqlite inv -nucs=95241 LWR_B_storage > storage_MA.txt";
-  system(Command.c_str());
-
-  FillInfo("storage_MA.txt", raw_Storage_MA);
-  Command = "rm -f storage_MA.txt";
+  FillInfo("RU_storage.txt", raw_Storage_RU);
+  FormFCOmap(raw_Storage_RU, FCO_Storage_RU);
+  Command = "rm -f RU_storage.txt";
   system(Command.c_str());
 
 
-  //reactor SFR_A
-  Command = "cyan -db cyclus.sqlite inv -nucs=95241 SFR_A_storage > storage_MA.txt";
+  //MA Storage
+  Command = " cyan -db cyclus.sqlite inv -nucs=95241 PWR_storage_ma > MA_storage.txt";
   system(Command.c_str());
 
-  FillInfo("storage_MA.txt", raw_Storage_MA);
-  Command = "rm -f storage_MA.txt";
-  system(Command.c_str());
-
-
-  //reactor SFR_B
-  Command = "cyan -db cyclus.sqlite inv -nucs=95241 SFR_B_storage > storage_MA.txt";
-  system(Command.c_str());
-
-  FillInfo("storage_MA.txt", raw_Storage_MA);
-  Command = "rm -f storage_MA.txt";
-  system(Command.c_str());
-
+  FillInfo("MA_storage.txt", raw_Storage_MA);
   FormFCOmap(raw_Storage_MA, FCO_Storage_MA);
+  Command = "rm -f MA_storage.txt";
+  system(Command.c_str());
+
+
 
 }
 
