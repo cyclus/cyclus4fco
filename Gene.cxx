@@ -21,6 +21,7 @@ int main(int argc, char ** argv){
   ReadEnrichFeed();
   ReadEnrichSWU();
   ReadStorage();
+  ReadWaste();
 
   ComputeRetiredFacility(raw_Deployed_LWR_A, raw_built_LWR_A, raw_Retired_LWR_A);
   ComputeRetiredFacility(raw_Deployed_LWR_B, raw_built_LWR_B, raw_Retired_LWR_B);
@@ -581,9 +582,10 @@ void ReadStorage(){
   system(Command.c_str());
 
   FillInfo("PWR_storage_Upu.txt", raw_Storage_pu);
+
   Command = "rm -f PWR_storage_Upu.txt";
   FormFCOmap(raw_Storage_pu, FCO_Storage_pu);
- system(Command.c_str());
+  system(Command.c_str());
 
   //RU Storage
   Command = " cyan -db cyclus.sqlite inv -nucs=92238 PWR_storage_Upu > RU_storage.txt";
@@ -593,6 +595,15 @@ void ReadStorage(){
   FormFCOmap(raw_Storage_RU, FCO_Storage_RU);
   Command = "rm -f RU_storage.txt";
   system(Command.c_str());
+
+  Command = " cyan -db cyclus.sqlite inv -nucs=92238 PWR_storage_Upu > DU_storage.txt";
+  system(Command.c_str());
+
+  FillInfo("DU_storage.txt", raw_Storage_DU);
+  FormFCOmap(raw_Storage_DU, FCO_Storage_DU);
+  Command = "rm -f DU_storage.txt";
+  system(Command.c_str());
+
 
 
   //MA Storage
