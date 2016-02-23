@@ -21,7 +21,6 @@ int main(int argc, char ** argv){
   ReadEnrichFeed();
   ReadEnrichSWU();
   ReadStorage();
-  ReadWaste();
 
   ComputeRetiredFacility(raw_Deployed_LWR_A, raw_built_LWR_A, raw_Retired_LWR_A);
   ComputeRetiredFacility(raw_Deployed_LWR_B, raw_built_LWR_B, raw_Retired_LWR_B);
@@ -439,14 +438,14 @@ void ReadStorageInv(){
   
 
   //DU Storage
-  Command = " cyan -db cyclus.sqlite inv DU_Storage > DU_storage.txt";
+/*  Command = " cyan -db cyclus.sqlite inv DU_Storage > DU_storage.txt";
   system(Command.c_str());
 
   FillInfo("DU_storage.txt", raw_Storage_DU);
   FormFCOmap(raw_Storage_DU, FCO_Storage_DU);
   Command = "rm -f DU_storage.txt";
   system(Command.c_str());
-
+*/
 
 }
 
@@ -580,23 +579,37 @@ void ReadStorage(){
   //reactor LWR_B
   Command = "cyan -db cyclus.sqlite inv -nucs=94239 PWR_storage_Upu > PWR_storage_Upu.txt";
   system(Command.c_str());
-
   FillInfo("PWR_storage_Upu.txt", raw_Storage_pu);
-
   Command = "rm -f PWR_storage_Upu.txt";
+
+  Command = "cyan -db cyclus.sqlite inv -nucs=94239 PWR_Upu_limited_storage > PWR_storage_Upu.txt";
+  system(Command.c_str());
+  FillInfo("PWR_storage_Upu.txt", raw_Storage_pu);
+  Command = "rm -f PWR_storage_Upu.txt";
+
+
   FormFCOmap(raw_Storage_pu, FCO_Storage_pu);
   system(Command.c_str());
 
-  //RU Storage
+  //U Storage
   Command = " cyan -db cyclus.sqlite inv -nucs=92238 PWR_storage_Upu > RU_storage.txt";
   system(Command.c_str());
-
   FillInfo("RU_storage.txt", raw_Storage_RU);
-  FormFCOmap(raw_Storage_RU, FCO_Storage_RU);
   Command = "rm -f RU_storage.txt";
+
+  Command = " cyan -db cyclus.sqlite inv -nucs=92238 PWR_Upu_limited_storage > RU_storage.txt";
+  system(Command.c_str());
+  FillInfo("RU_storage.txt", raw_Storage_RU);
+  Command = "rm -f RU_storage.txt";
+
+
+  FormFCOmap(raw_Storage_RU, FCO_Storage_RU);
   system(Command.c_str());
 
-  Command = " cyan -db cyclus.sqlite inv -nucs=92238 PWR_storage_Upu > DU_storage.txt";
+
+
+  //Pu Blanket
+  Command = " cyan -db cyclus.sqlite inv -nucs=92238 blanket_Upu_limited_storage > DU_storage.txt";
   system(Command.c_str());
 
   FillInfo("DU_storage.txt", raw_Storage_DU);
@@ -605,15 +618,56 @@ void ReadStorage(){
   system(Command.c_str());
 
 
-
-  //MA Storage
-  Command = " cyan -db cyclus.sqlite inv -nucs=95241 PWR_storage_ma > MA_storage.txt";
+  //U blanket
+  Command = " cyan -db cyclus.sqlite inv -nucs=94239 blanket_Upu_limited_storage > MA_storage.txt";
   system(Command.c_str());
 
   FillInfo("MA_storage.txt", raw_Storage_MA);
   FormFCOmap(raw_Storage_MA, FCO_Storage_MA);
   Command = "rm -f MA_storage.txt";
   system(Command.c_str());
+
+
+
+
+
+
+  //U waste
+  Command = " cyan -db cyclus.sqlite inv -nucs=92238 waste > U_HLW.txt";
+  system(Command.c_str());
+
+  FillInfo("U_HLW.txt", raw_HLW_U);
+  FormFCOmap(raw_HLW_U, FCO_HLW_U);
+  Command = "rm -f U_HLW.txt";
+  system(Command.c_str());
+
+  //Pu waste
+  Command = " cyan -db cyclus.sqlite inv -nucs=Pu239 waste > Pu_HLW.txt";
+  system(Command.c_str());
+
+  FillInfo("Pu_HLW.txt", raw_HLW_Pu);
+  FormFCOmap(raw_HLW_Pu, FCO_HLW_Pu);
+  Command = "rm -f Pu_HLW.txt";
+  system(Command.c_str());
+
+
+  //MA waste
+  Command = " cyan -db cyclus.sqlite inv -nucs=Am241 waste > MA_HLW.txt";
+  system(Command.c_str());
+
+  FillInfo("MA_HLW.txt", raw_HLW_MA);
+  FormFCOmap(raw_HLW_MA, FCO_HLW_MA);
+  Command = "rm -f MA_HLW.txt";
+  system(Command.c_str());
+  //U waste
+  Command = " cyan -db cyclus.sqlite inv -nucs=Cs137 waste > FP_HLW.txt";
+  system(Command.c_str());
+
+  FillInfo("FP_HLW.txt", raw_HLW_FP);
+  FormFCOmap(raw_HLW_FP, FCO_HLW_FP);
+  Command = "rm -f FP_HLW.txt";
+  system(Command.c_str());
+
 
 
 
@@ -636,6 +690,8 @@ void   PrintoutFile(){
   Output << "retired_LWR_A\tretired_LWR_B\tretired_SFR_A\tretired_SFR_B\t";
   Output << "stored_Pu\tstored_MA\t";
   Output << "depleted_U\tRecycled_U\t";
+  Output << "wasted_U\twasted_Pu\t";
+  Output << "wasted_MA\twasted_FP\t";
   Output << endl;
 
   for(int i = time_min/12; i < time_max/12+1; i++){
@@ -678,6 +734,10 @@ void   PrintoutFile(){
     Output << get_val_at(i, FCO_Storage_MA) << " ";
     Output << get_val_at(i, FCO_Storage_DU) << " ";
     Output << get_val_at(i, FCO_Storage_RU) << " ";
+    Output << get_val_at(i, FCO_HLW_U) << " ";
+    Output << get_val_at(i, FCO_HLW_Pu) << " ";
+    Output << get_val_at(i, FCO_HLW_MA) << " ";
+    Output << get_val_at(i, FCO_HLW_FP) << " ";
     Output << endl;
     
     

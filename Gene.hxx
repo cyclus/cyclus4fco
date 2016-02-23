@@ -104,6 +104,13 @@ map<int,double> raw_cooling_SFR_B;
 map<int,double> raw_EnrichFeed;
 map<int,double> raw_EnrichSWU;
 
+
+map<int,double> raw_HLW_U;
+map<int,double> raw_HLW_Pu;
+map<int,double> raw_HLW_MA;
+map<int,double> raw_HLW_FP;
+
+
 map<int,double> raw_Storage_pu;
 map<int,double> raw_Storage_MA;
 
@@ -157,6 +164,12 @@ map<int,double> FCO_cooling_SFR_B;
 
 map<int,double> FCO_EnrichFeed;
 map<int,double> FCO_EnrichSWU;
+
+map<int,double> FCO_HLW_U;
+map<int,double> FCO_HLW_Pu;
+map<int,double> FCO_HLW_MA;
+map<int,double> FCO_HLW_FP;
+
 
 map<int,double> FCO_Storage_pu;
 map<int,double> FCO_Storage_MA;
