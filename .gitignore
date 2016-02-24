@@ -5,3 +5,4 @@ a.out
 *.tar.gz
 *.sw*
 *.dat
+~$*
