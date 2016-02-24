@@ -7,35 +7,50 @@ import re
 
 
 def read_input(input):
-  print(input)
+  f = open(input, 'r')
+  matrix = []
+  for line in f:
+    print(line)
+    matrix.append(line)
 
+  return matrix
 
 def read( parameters ):
   print(paramters)
+
+
+def recover_info( cmd ):
+  output = subprocess.check_output(cmd.split())
+  buf = output.decode("utf-8")
+  lines = buf.splitlines()
+  matrix = []
+  for line in lines:
+    cols = line.split()
+    matrix.append(cols)
+  return matrix
+
+def treat_the_matrix( matrix)
+
+
+
+def build_cmd(inputline)
 
 
 #def write_outputfile():
 
 
 def main():
-  output = "echo "
+
+  if len(sys.argv) != 2 :
+    print("missing argument !!")
+  #   quit()
+
+
+
   prog = 'cyan'
   db = 'cyclus.sqlite'
   cmd = prog + ' -db ' + db + ' trans'
-  print(cmd)
-
-  output = subprocess.check_output(cmd.split())
-  buf = output.decode("utf-8")
-  #  line = buf.readline()
-  # print(line)
-  print(buf.__class__)
-  lines = buf.splitlines()
-  matrix = []
-
-  print(len(lines))
-  for line in lines:
-    cols = line.split()
-    matrix.append(cols)
+  matrix = recover_info(cmd)
 
   read_input(sys.argv[1])
 #  print(len(matrix))
