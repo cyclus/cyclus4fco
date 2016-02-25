@@ -1,0 +1,13 @@
+RE1 N:N1...NN F1:F11,..,F1X, ... F4:F41,..,F4X, LF:960y
+
+RP_F1_R1 N:N1...NN C:C1:..CN
+
+CO_F1_R1 N:N1..NN C:C1...CN
+
+WR_F1_R1 N:N1..NN C:C1,..,CN
+
+
+ST N1...NN
+WT WT1...WTN
+TT hbhgv
+TT
