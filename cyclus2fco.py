@@ -43,14 +43,53 @@ def recover_info(line):
   else :
     line_hd,line_def = line.split(' ',1)
     hd_id = line_hd[0:2]
-    if hd_id == 'RE' : print("reactor")
-    elif hd_id == 'RP' : print("repro")
-    elif hd_id == 'CO' : print("cooling")
-    elif hd_id == 'WR' : print("waiting repro")
-    elif hd_id == 'ST' : print("storage")
-    elif hd_id == 'WT' : print("waste")
+    if   hd_id == "RE" : read_reactor(line_hd, line_def)
+    elif hd_id == "RP" : print("repro")
+    elif hd_id == "CO" : print("cooling")
+    elif hd_id == "WR" : print("waiting repro")
+    elif hd_id == "ST" : print("storage")
+    elif hd_id == "WT" : print("waste")
     else : print("bad keyword in: ", line )
 #def write_outputfile():
+
+
+def read_reactor(hd, info):
+
+  fuelname = []
+
+  f_name  = []
+  for i in range(4):
+    f_name.append([])
+
+  r_name = []
+  r_lt = ""
+  r_id = hd[2]
+  r_info = info.split()
+
+  for kw in r_info:
+    kw_id = kw[0:2]
+
+    if kw_id == "LT":
+      r_lt = kw[3:]
+      print(r_lt)
+
+
+    if kw_id == "NA":
+      r_name = kw[3:].split(',')
+      for name in r_name:
+        print(name)
+      print("\n")
+
+    if re.match("(F[0-9])",kw_id) :
+      f_id = int(kw_id[1])-1
+
+      name_tmp = kw[3:].split(',')
+      for name in name_tmp:
+        f_name[f_id].append(name)
+      for name in f_name[f_id]:
+        print(name)
+      print("\n")
+
 
 
 def main():
