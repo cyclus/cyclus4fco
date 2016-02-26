@@ -66,20 +66,24 @@ def read_reactor(hd, info):
   r_id = hd[2]
   r_info = info.split()
 
+
+# read Reactor information
   for kw in r_info:
     kw_id = kw[0:2]
 
+# get LifeTime
     if kw_id == "LT":
       r_lt = kw[3:]
       print(r_lt)
 
-
+# get reactor Name
     if kw_id == "NA":
       r_name = kw[3:].split(',')
       for name in r_name:
         print(name)
       print("\n")
 
+# get Fuel Name
     if re.match("(F[0-9])",kw_id) :
       f_id = int(kw_id[1])-1
 
@@ -89,6 +93,22 @@ def read_reactor(hd, info):
       for name in f_name[f_id]:
         print(name)
       print("\n")
+
+#get Power intel
+  cmd = "cyan -db cyclus.sqlite power "
+  for name in r_name:
+    cmd += "-proto="
+    cmd += name
+    cmd += " "
+  r_power_E = cyan(cmd)
+
+#get build intel
+cmd = "cyan -db cyclus.sqlite power "
+  for name in r_name:
+    cmd += "-proto="
+    cmd += name
+    cmd += " "
+r_power_E = cyan(cmd)
 
 
 
