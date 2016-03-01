@@ -58,7 +58,7 @@ void PrintoutFile();
 double get_val_at(int i, map<int,double> my_map);
 
 
-int time_max = 1200;
+int time_max = 1440;
 int time_min = 0;
 
 string filename;
