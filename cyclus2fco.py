@@ -3,7 +3,18 @@ from __future__ import print_function, unicode_literals
 import sys
 import subprocess
 import io
+import numpy as np
 import re
+global r_power_E
+global r_deployed
+global r_flow
+global c_flow
+t_4 = [ [], [], [], []]
+t_4_4 = [ t_4, t_4, t_4, t_4]
+r_deployed = [ [], [], [], []]
+r_power_E = [ [], [], [], []]
+r_flow = [ [], [], [], [] ]
+c_inv = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ]]
 
 
 def read_input(input):
@@ -27,7 +38,7 @@ def cyan( cmd ):
   for line in lines:
     cols = line.split()
     matrix.append(cols)
-  return matrix
+  return matrix[1:]
 
 def treat_the_matrix(matrix):
   print(matrix)
@@ -45,7 +56,7 @@ def recover_info(line):
     hd_id = line_hd[0:2]
     if   hd_id == "RE" : read_reactor(line_hd, line_def)
     elif hd_id == "RP" : print("repro")
-    elif hd_id == "CO" : print("cooling")
+    elif hd_id == "CO" : read_cooling(line_hd, line_def)
     elif hd_id == "WR" : print("waiting repro")
     elif hd_id == "ST" : print("storage")
     elif hd_id == "WT" : print("waste")
@@ -54,61 +65,76 @@ def recover_info(line):
 
 
 def read_reactor(hd, info):
-
-  fuelname = []
-
-  f_name  = []
-  for i in range(4):
+  f_name  = []        #fuel
+  for i in range(4):  #max 4 differents fuel
     f_name.append([])
-
-  r_name = []
-  r_lt = ""
-  r_id = hd[2]
+  r_name = []         #reactor proto name
+  r_lt = ""           #reactor lifetime
+  r_id = int(hd[2])   #reactor number
   r_info = info.split()
-
-
-# read Reactor information
+  # read Reactor information
   for kw in r_info:
     kw_id = kw[0:2]
-
-# get LifeTime
+  # get LifeTime
     if kw_id == "LT":
       r_lt = kw[3:]
       print(r_lt)
-
-# get reactor Name
+  # get reactor Name
     if kw_id == "NA":
       r_name = kw[3:].split(',')
       for name in r_name:
         print(name)
       print("\n")
-
-# get Fuel Name
+  # get Fuel Name
     if re.match("(F[0-9])",kw_id) :
       f_id = int(kw_id[1])-1
-
       name_tmp = kw[3:].split(',')
       for name in name_tmp:
         f_name[f_id].append(name)
       for name in f_name[f_id]:
         print(name)
       print("\n")
-
-#get Power intel
+  #get Power intel
   cmd = "cyan -db cyclus.sqlite power "
   for name in r_name:
     cmd += "-proto="
     cmd += name
     cmd += " "
-  r_power_E = cyan(cmd)
-
-#get build intel
-cmd = "cyan -db cyclus.sqlite power "
+  r_power_E[r_id] = cyan(cmd)
+  #get build intel
   for name in r_name:
-    cmd += "-proto="
+    cmd = "cyan -db cyclus.sqlite built "
     cmd += name
-    cmd += " "
-r_power_E = cyan(cmd)
+    r_deployed[r_id] += cyan(cmd)
+  #get fresh fuel intel
+  for name in r_name:
+    cmd = "cyan -db cyclus.sqlite flow -to "
+    cmd += name
+    r_flow[r_id] += cyan(cmd)
+
+  for truc in r_flow[r_id]:
+    print(truc)
+
+
+
+
+def read_cooling(hd, info):
+  c_name = info.split(',')
+  c_id, c_r_id, c_f_id = hd.split('_')
+  # read Cooling information
+
+  r_id = int(c_r_id[1])
+  f_id = int(c_f_id[1])
+
+  for name in c_name:
+    cmd = "cyan -db cyclus.sqlite inv  "
+    cmd += name
+    print(cmd)
+    c_inv[r_id][f_id] += cyan(cmd)
+
+#  for truc in c_inv[r_id][f_id]:
+#   print(truc)
+
 
 
 
