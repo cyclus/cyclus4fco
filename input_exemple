@@ -3,7 +3,7 @@ RE1 NA:LWR_A,LWR_B F1:F11,F12,F1X F4:F41,F42,F4X LT:960y
 RP_F1_R1 N:N1...NN C:C1:..CN
 
 
-WR_F1_R1 N:N1..NN C:C1,..,CN
+WR_F1_R1 LWR_A_storage,LWR_B_storage
 
 CO_F1_R1 LWR_A_cooling,LWR_B_cooling
 

@@ -8,13 +8,15 @@ import re
 global r_power_E
 global r_deployed
 global r_flow
-global c_flow
+global c_inv
+global wr_inv
 t_4 = [ [], [], [], []]
 t_4_4 = [ t_4, t_4, t_4, t_4]
 r_deployed = [ [], [], [], []]
 r_power_E = [ [], [], [], []]
 r_flow = [ [], [], [], [] ]
 c_inv = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ]]
+wr_inv = [ [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ], [ [], [], [], [] ]]
 
 
 def read_input(input):
@@ -57,7 +59,7 @@ def recover_info(line):
     if   hd_id == "RE" : read_reactor(line_hd, line_def)
     elif hd_id == "RP" : print("repro")
     elif hd_id == "CO" : read_cooling(line_hd, line_def)
-    elif hd_id == "WR" : print("waiting repro")
+    elif hd_id == "WR" : read_waiting_repro(line_hd, line_def)
     elif hd_id == "ST" : print("storage")
     elif hd_id == "WT" : print("waste")
     else : print("bad keyword in: ", line )
@@ -116,6 +118,22 @@ def read_reactor(hd, info):
     print(truc)
 
 
+def read_waiting_repro(hd, info):
+  wr_name = info.split(',')
+  wr_id, wr_r_id, wr_f_id = hd.split('_')
+  # read Waiting Repro information
+
+  r_id = int(wr_r_id[1])
+  f_id = int(wr_f_id[1])
+
+  for name in wr_name:
+    cmd = "cyan -db cyclus.sqlite inv  "
+    cmd += name
+    wr_inv[r_id][f_id] += cyan(cmd)
+
+#  for truc in wr_inv[r_id][f_id]:
+#   print(truc)
+
 
 
 def read_cooling(hd, info):
@@ -129,11 +147,8 @@ def read_cooling(hd, info):
   for name in c_name:
     cmd = "cyan -db cyclus.sqlite inv  "
     cmd += name
-    print(cmd)
     c_inv[r_id][f_id] += cyan(cmd)
 
-#  for truc in c_inv[r_id][f_id]:
-#   print(truc)
 
 
 
