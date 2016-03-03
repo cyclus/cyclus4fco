@@ -7,8 +7,5 @@ WR_F1_R1 LWR_A_storage,LWR_B_storage
 
 CO_F1_R1 LWR_A_cooling,LWR_B_cooling
 
-
-ST N1...NN
-WT WT1...WTN
-TT hbhgv
-TT
+ST SFR_A_storage,SFR_B_storage
+WT waste
