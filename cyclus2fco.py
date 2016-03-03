@@ -33,13 +33,8 @@ def read_input(input):
   f = open(input, 'r')
   matrix = []
   for line in f:
-    #    print(line)
     matrix.append(line)
-
   return matrix
-
-def read( parameters ):
-  print(paramters)
 
 
 def cyan( cmd ):
@@ -52,9 +47,6 @@ def cyan( cmd ):
     matrix.append(cols)
   return matrix[1:]
 
-def fill_the_matrix(matrix_to_fill, matrix_row):
-  print( "TOTO")
-
 
 def translate_info(input, size, lengh):
   output = np.zeros(lengh)
@@ -62,9 +54,15 @@ def translate_info(input, size, lengh):
     output[int(couple[0])] += float(couple[1])
   return output
 
-
-def build_cmd(inputline):
-  print(inputline)
+def month2year(input, cumulativ):
+  lengh = len(input)
+  output = np.zeros(lengh/12)
+  for i in range(lengh):
+    if i % 12 == 0:
+      output[i/12] = input[i]
+    elif cumulativ:
+      output[i/12] += input[i]
+  return output
 
 
 def recover_info(line):
@@ -127,8 +125,9 @@ def read_reactor(hd, info):
     cmd += name
     r_flow[r_id] += cyan(cmd)
 
-  translate_info(r_flow[r_id], 2,timestep)
-
+  r_flows = translate_info(r_flow[r_id], 2,timestep)
+  print(len(r_flows))
+  print(len(month2year(r_flows, bool(0))))
 
 
 def read_reprocessing(hd, info):
