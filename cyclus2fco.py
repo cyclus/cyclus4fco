@@ -29,6 +29,7 @@ nucs_MA = nucs_Am + "," + nucs_Cm + "," + nucs_Np
 nucs_name = [ nucs_U, nucs_Pu, nucs_MA, nucs_FP]
 
 
+
 def push_in_fco_excel(matrix, sheet, column, start_row):
   for i in range (len(matrix)):
     cmd = "sed 's/\(r=\""+column + str(start_row+i)
@@ -37,9 +38,13 @@ def push_in_fco_excel(matrix, sheet, column, start_row):
     os.system(cmd)
     os.system("mv _tmp/xl/worksheets/sheet_tmp.xml _tmp/xl/worksheets/" + sheet)
 
+
+
 def open_xslm(filename):
   cmd = 'unzip '+ filename + ' -d _tmp/'
   output = subprocess.check_output(cmd.split())
+
+
 
 def save_xslm(filename):
   cmd = 'cd _tmp; zip -r ../'+ filename + ' *'
@@ -48,12 +53,14 @@ def save_xslm(filename):
   os.system(cmd)
 
 
+
 def read_input(input):
   f = open(input, 'r')
   matrix = []
   for line in f:
     matrix.append(line)
   return matrix
+
 
 
 def cyan( cmd ):
@@ -67,11 +74,14 @@ def cyan( cmd ):
   return matrix[1:]
 
 
+
 def translate_info(input, size, lengh):
   output = np.zeros(lengh)
   for couple in input:
     output[int(couple[0])] += float(couple[1])
   return output
+
+
 
 def month2year(input, cumulativ, rate):
   lengh = len(input)
@@ -87,21 +97,20 @@ def month2year(input, cumulativ, rate):
   return output
 
 
+
 def recover_info(line):
   if len(line.split(' ',1)) != 2:
           print("badline", line)
   else :
     line_hd,line_def = line.split(' ',1)
     hd_id = line_hd[0:2]
-    # if   hd_id == "RE" : read_reactor(line_hd, line_def)
-    # elif hd_id == "RP" : read_reprocessing(line_hd, line_def)
-    #el
-    if hd_id == "CO" : read_cooling(line_hd, line_def)
+    if   hd_id == "RE" : read_reactor(line_hd, line_def)
+    elif hd_id == "RP" : read_reprocessing(line_hd, line_def)
+    elif hd_id == "CO" : read_cooling(line_hd, line_def)
     elif hd_id == "WR" : read_waiting_repro(line_hd, line_def)
-    #elif hd_id == "ST" : read_storage(line_hd, line_def)
-    #elif hd_id == "WT" : read_waste(line_hd, line_def)
+    elif hd_id == "ST" : read_storage(line_hd, line_def)
+    elif hd_id == "WT" : read_waste(line_hd, line_def)
     else : print("bad keyword in: ", line )
-#def write_outputfile():
 
 
 def read_reactor(hd, info):
@@ -207,10 +216,10 @@ def read_reactor(hd, info):
 
 def read_reprocessing(hd, info):
 
-  FCO_separation_LR_position = [[ 'FI', 'FN', 'FS', 'FX'],
-                              [ 'GC', 'GH', 'GM', 'GR'],
-                              [ 'GW', 'HB', 'HG', 'HL'],
-                              [ 'HQ', 'HV', 'IA', 'IF']]
+  FCO_separation_position = [[ 'FI', 'FN', 'FS', 'FX'],
+                             [ 'GC', 'GH', 'GM', 'GR'],
+                             [ 'GW', 'HB', 'HG', 'HL'],
+                             [ 'HQ', 'HV', 'IA', 'IF']]
   r_sheet_sepatation = 'sheet3.xml'
 
   rp_inv = []
@@ -236,16 +245,16 @@ def read_reprocessing(hd, info):
       rp_inv += cyan("cyan -db cyclus.sqlite flow -to " + name + " -commod=" + commods  )
   rp_inv = translate_info(rp_inv, 2,timestep)
   rp_inv_yearly = month2year(rp_inv, 1, 1)/1000
-  push_in_fco_excel(rp_inv_yearly, r_sheet_sepatation, FCO_separation_LR_position[r_id][f_id], 6)
+  push_in_fco_excel(rp_inv_yearly, r_sheet_sepatation, FCO_separation_position[r_id][f_id], 6)
 
 
 
 def read_waiting_repro(hd, info):
 
-  FCO_waiting_LR_position = [[ 'CF', 'CK', 'CP', 'CU'],
-                             [ 'CZ', 'DE', 'DJ', 'DO'],
-                             [ 'DT', 'DY', 'ED', 'EI'],
-                             [ 'EN', 'ES', 'EX', 'FC']]
+  FCO_waiting_position = [[ 'CF', 'CK', 'CP', 'CU'],
+                          [ 'CZ', 'DE', 'DJ', 'DO'],
+                          [ 'DT', 'DY', 'ED', 'EI'],
+                          [ 'EN', 'ES', 'EX', 'FC']]
   r_sheet_waiting = 'sheet4.xml'
 
   wr_inv = []
@@ -260,15 +269,15 @@ def read_waiting_repro(hd, info):
     wr_inv += cyan(cmd)
   wr_inv = translate_info(wr_inv, 2,timestep)
   wr_inv_yearly = month2year(wr_inv, 0, 0)/1000
-  push_in_fco_excel(wr_inv_yearly, r_sheet_waiting, FCO_waiting_LR_position[r_id][f_id], 6)
+  push_in_fco_excel(wr_inv_yearly, r_sheet_waiting, FCO_waiting_position[r_id][f_id], 6)
 
 
 
 def read_cooling(hd, info):
-  FCO_cooling_LR_position = [[ 'C', 'H', 'M', 'R'],
-                             [ 'W', 'AB', 'AG', 'AL'],
-                             [ 'AQ', 'AV', 'BA', 'BF'],
-                             [ 'BK', 'BP', 'BU', 'BZ']]
+  FCO_cooling_position = [[ 'C', 'H', 'M', 'R'],
+                          [ 'W', 'AB', 'AG', 'AL'],
+                          [ 'AQ', 'AV', 'BA', 'BF'],
+                          [ 'BK', 'BP', 'BU', 'BZ']]
   r_sheet_cooling = 'sheet4.xml'
 
   c_inv = []
@@ -283,29 +292,42 @@ def read_cooling(hd, info):
     c_inv += cyan(cmd)
   c_inv = translate_info(c_inv, 2,timestep)
   c_inv_yearly = month2year(c_inv, 0, 0)/1000
-  push_in_fco_excel(c_inv_yearly, r_sheet_cooling, FCO_cooling_LR_position[r_id][f_id], 6)
+  push_in_fco_excel(c_inv_yearly, r_sheet_cooling, FCO_cooling_position[r_id][f_id], 6)
 
 
 
 def read_storage(hd, info):
+  FCO_storage_position = ['FI', 'FN', 'FS', 'FX']
+  FCO_storage_pu_position = ['GD', 'GI', 'GN', 'GS', 'GX']
+  r_sheet_storage = 'sheet4.xml'
 
-  st_inv = [ [], [], [], [] ]
-  st_pu_inv = [ [], [], [], [] ]
+  st_inv = [ [], [] ,[], []]
+  st_pu_inv = [ [], [] ,[], [], []]
   st_name = info.split(',')
   # read Cooling information
   for name in st_name:
     cmd = "cyan -db cyclus.sqlite inv "
     for i in range(4):
       st_inv[i] += cyan(cmd + "-nucs=" + nucs_name[i] +" " + name)
-
+  for i in range(4):
+    st_inv[i] = translate_info(st_inv[i], 2,timestep)
+    st_inv_yearly = month2year(st_inv[i], 0, 0)/1000
+    push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_storage_position[i], 6)
 
   for name in st_name:
     cmd = "cyan -db cyclus.sqlite inv "
-    for i in range(4):
+    for i in range(5):
       st_pu_inv[i] += cyan(cmd + "-nucs=" + nucs_Pu_list[i] +" " + name)
+  for i in range(5):
+    st_pu_inv[i] = translate_info(st_pu_inv[i], 2,timestep)
+    st_inv_yearly = month2year(st_pu_inv[i], 0, 0)/1000
+    push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_storage_pu_position[i], 6)
+
 
 
 def read_waste(hd, info):
+  FCO_waste_position = ['HD', 'HI', 'HN', 'HS']
+  r_sheet_waste = 'sheet4.xml'
   wt_inv = [ [], [], [], [] ]
   wt_name = info.split(',')
   # read Cooling information
@@ -313,6 +335,11 @@ def read_waste(hd, info):
     cmd = "cyan -db cyclus.sqlite inv "
     for i in range(4):
       wt_inv[i] += cyan(cmd + "-nucs=" + nucs_name[i] +" " + name)
+  for i in range(4):
+    wt_inv[i] = translate_info(wt_inv[i], 2,timestep)
+    wt_inv_yearly = month2year(wt_inv[i], 0, 0)/1000
+    push_in_fco_excel(wt_inv_yearly, r_sheet_waste, FCO_waste_position[i], 6)
+
 
 
 def get_timestep():
@@ -320,6 +347,8 @@ def get_timestep():
   ps = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
   timestep = int(ps.communicate()[0][:-1])
   return timestep
+
+
 
 def main():
   global timestep
