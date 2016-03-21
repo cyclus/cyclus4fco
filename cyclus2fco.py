@@ -17,16 +17,15 @@ global wr_inv
 fco_sheet = ['Data-Front End', 'Data-Reactor', 'Data-Recycle', 'Data-Inventories', 'Data-Economics', 'Data-Wildcard', 'Graph_Data', 'Settings', 'Pres_Graphs', 'Graphs (C1-4)', 'Version Notes']
 
 #Half-life > 1h
-nucs_U = "230U,231U,232U,233U,234U,235U,236U,237U,238U,240U"
 nucs_Pu_list = [ "238pu", "239pu", "240pu", "241pu", "242pu"]
 
+nucs_U = "230U,231U,232U,233U,234U,235U,236U,237U,238U,240U"
 nucs_Pu = "234Pu,235Pu,236Pu,237Pu,238Pu,239Pu,240Pu,241Pu,242Pu,243Pu,244Pu,245Pu,246Pu,247Pu"
 nucs_Am = "239Am,240Am,241Am,242Am,243Am,244Am,245Am"
 nucs_Cm = "238Cm,240Cm,241Cm,242Cm,243Am,244Cm,245Cm,246Cm,247Cm,248Cm,250Cm"
 nucs_Np = "234Np,235Np,236Np,237Np,238Np,239Np"
 nucs_FP = "137Cs"
 nucs_MA = nucs_Am + "," + nucs_Cm + "," + nucs_Np
-nucs_name = [ nucs_U, nucs_Pu, nucs_MA, nucs_FP]
 
 
 
@@ -295,37 +294,63 @@ def read_cooling(hd, info):
   push_in_fco_excel(c_inv_yearly, r_sheet_cooling, FCO_cooling_position[r_id][f_id], 6)
 
 
-
 def read_storage(hd, info):
-  FCO_storage_position = ['FI', 'FN', 'FS', 'FX']
+  # filling order is U Pu MA FP
+  nucs_name = [ nucs_Pu, nucs_MA ]
+
+  FCO_PUMA_storage_position = ['FI', 'FN']
   FCO_storage_pu_position = ['GD', 'GI', 'GN', 'GS', 'GX']
   r_sheet_storage = 'sheet4.xml'
 
-  st_inv = [ [], [] ,[], []]
-  st_pu_inv = [ [], [] ,[], [], []]
-  st_name = info.split(',')
-  # read Cooling information
-  for name in st_name:
-    cmd = "cyan -db cyclus.sqlite inv "
-    for i in range(4):
-      st_inv[i] += cyan(cmd + "-nucs=" + nucs_name[i] +" " + name)
-  for i in range(4):
-    st_inv[i] = translate_info(st_inv[i], 2,timestep)
-    st_inv_yearly = month2year(st_inv[i], 0, 0)/1000
-    push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_storage_position[i], 6)
+  if len(hd) == 2 : # read PU and MA storage content
+    st_inv = [ [], [] ]
+    st_pu_inv = [ [], [] ,[], [], []]
+    st_name = info.split(',')
+    # read Cooling information
+    for name in st_name:
+      cmd = "cyan -db cyclus.sqlite inv "
+      for i in range(2):
+        st_inv[i] += cyan(cmd + "-nucs=" + nucs_name[i] +" " + name)
+    for i in range(2):
+      st_inv[i] = translate_info(st_inv[i], 2,timestep)
+      st_inv_yearly = month2year(st_inv[i], 0, 0)/1000
+      push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_PUMA_storage_position[i], 6)
 
-  for name in st_name:
-    cmd = "cyan -db cyclus.sqlite inv "
+    for name in st_name:
+      cmd = "cyan -db cyclus.sqlite inv "
+      for i in range(5):
+        st_pu_inv[i] += cyan(cmd + "-nucs=" + nucs_Pu_list[i] +" " + name)
     for i in range(5):
-      st_pu_inv[i] += cyan(cmd + "-nucs=" + nucs_Pu_list[i] +" " + name)
-  for i in range(5):
-    st_pu_inv[i] = translate_info(st_pu_inv[i], 2,timestep)
-    st_inv_yearly = month2year(st_pu_inv[i], 0, 0)/1000
-    push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_storage_pu_position[i], 6)
+      st_pu_inv[i] = translate_info(st_pu_inv[i], 2,timestep)
+      st_inv_yearly = month2year(st_pu_inv[i], 0, 0)/1000
+      push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_storage_pu_position[i], 6)
+  else : # read RU/DU content
+    st_id = hd.split('_')[1]
+    if st_id == "DU":
+      FCO_DU_storage_position = 'FX'
+      st_name = info.split(',')
+      st_inv = []
+      for name in st_name:
+        cmd = "cyan -db cyclus.sqlite inv "
+        st_inv += cyan(cmd + "-nucs=" + nucs_U + " " + name)
+      st_inv = translate_info(st_inv, 2,timestep)
+      st_inv_yearly = month2year(st_inv, 0, 0)/1000
+      push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_DU_storage_position, 6)
+    elif st_id == "RU":
+      FCO_RU_storage_position = 'FS'
+      st_name = info.split(',')
+      st_inv = []
+      for name in st_name:
+        cmd = "cyan -db cyclus.sqlite inv "
+        st_inv += cyan(cmd + "-nucs=" + nucs_U + " " + name)
+      st_inv = translate_info(st_inv, 2,timestep)
+      st_inv_yearly = month2year(st_inv, 0, 0)/1000
+      push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_RU_storage_position, 6)
 
 
 
 def read_waste(hd, info):
+  nucs_name = [ nucs_U, nucs_Pu, nucs_MA, nucs_FP]
   FCO_waste_position = ['HD', 'HI', 'HN', 'HS']
   r_sheet_waste = 'sheet4.xml'
   wt_inv = [ [], [], [], [] ]

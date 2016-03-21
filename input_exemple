@@ -23,4 +23,6 @@ WR_R4_F4 SFR_B_storage
 
 
 ST LWR_A_storage,LWR_B_storage,SFR_A_storage,SFR_B_storage
+ST_DU LWR_A_storage
+ST_RU LWR_A_storage
 WT waste
