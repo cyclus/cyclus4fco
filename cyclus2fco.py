@@ -24,7 +24,7 @@ nucs_Pu = "234Pu,235Pu,236Pu,237Pu,238Pu,239Pu,240Pu,241Pu,242Pu,243Pu,244Pu,245
 nucs_Am = "239Am,240Am,241Am,242Am,243Am,244Am,245Am"
 nucs_Cm = "238Cm,240Cm,241Cm,242Cm,243Am,244Cm,245Cm,246Cm,247Cm,248Cm,250Cm"
 nucs_Np = "234Np,235Np,236Np,237Np,238Np,239Np"
-nucs_FP = "137Cs"
+nucs_FP = "H3,GE74,AS75,GE76,SE77,SE78,SE79,SE80,BR81,SE82,KR82,KR83,KR84,KR85,RB85,KR86,SR86,RB87,SR88,SR89,Y89,SR90,ZR90,SR91,Y91,ZR91,ZR92,Y93,ZR93,ZR94,ZR95,NB95,MO95,ZR96,MO96,ZR97,MO97,MO98,MO99,TC99,TC99M,MO100,RU100,RU101,RU102,RU103,RH103,RU104,PD104,RU105,RH105,PD105,RU106,PD106,PD107,PD108,PD109,AG109,PD110,AG110,CD110,AG111,CD111,CD112,CD113,CD113,CD114,IN115,SN115,CD116,SN116,SN117,SN118,SN119,SN120,SB121,SN122,TE122,SN123,SB123,SN124,SB124,TE124,SN125,SB125,TE125,TE125,SN126,TE126,SB127,TE127,I127,TE128,XE128,TE129,I129,TE130,XE130,TE131,I131,XE131,XE131,TE132,I132,XE132,I133,XE133,XE133,CS133,XE134,CS134,BA134,I135,XE135,CS135,BA135,XE136,CS136,BA136,CS137,BA137,BA138,LA138,LA139,BA140,LA140,CE140,LA141,CE141,PR141,CE142,ND142,CE143,PR143,ND143,CE144,ND144,PR145,ND145,ND146,ND147,PM147,SM147,ND148,PM148,SM148,PM149,SM149,ND150,SM150,PM151,SM151,SM152,SM153,EU153,SM154,EU154,GD154,EU155,GD155,EU156,GD156,GD157,GD158,TB159,GD160,TB160,DY160,DY161,DY162,DY163,DY164,HO165,ER166"
 nucs_MA = nucs_Am + "," + nucs_Cm + "," + nucs_Np
 
 
@@ -343,6 +343,26 @@ def read_storage(hd, info):
       for name in st_name:
         cmd = "cyan -db cyclus.sqlite inv "
         st_inv += cyan(cmd + "-nucs=" + nucs_U + " " + name)
+      st_inv = translate_info(st_inv, 2,timestep)
+      st_inv_yearly = month2year(st_inv, 0, 0)/1000
+      push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_RU_storage_position, 6)
+    elif st_id == "MA":
+      FCO_RU_storage_position = 'FN'
+      st_name = info.split(',')
+      st_inv = []
+      for name in st_name:
+        cmd = "cyan -db cyclus.sqlite inv "
+        st_inv += cyan(cmd + "-nucs=" + nucs_MA + " " + name)
+      st_inv = translate_info(st_inv, 2,timestep)
+      st_inv_yearly = month2year(st_inv, 0, 0)/1000
+      push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_RU_storage_position, 6)
+    elif st_id == "PU":
+      FCO_RU_storage_position = 'FI'
+      st_name = info.split(',')
+      st_inv = []
+      for name in st_name:
+        cmd = "cyan -db cyclus.sqlite inv "
+        st_inv += cyan(cmd + "-nucs=" + nucs_Pu + " " + name)
       st_inv = translate_info(st_inv, 2,timestep)
       st_inv_yearly = month2year(st_inv, 0, 0)/1000
       push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_RU_storage_position, 6)
