@@ -75,7 +75,7 @@ def cyan( cmd ):
 
 
 def translate_info(input, size, lengh):
-  output = np.zeros(lengh)
+  output = np.zeros(lengh, dtype=np.float64)
   for couple in input:
     output[int(couple[0])] += float(couple[1])
   return output
@@ -84,12 +84,12 @@ def translate_info(input, size, lengh):
 
 def month2year(input, cumulativ, rate):
   lengh = len(input)
-  output = np.zeros(lengh/12)
+  output = np.zeros(int(lengh/12), dtype=np.float64)
   for i in range(lengh):
     if i % 12 == 0:
-      output[i/12] = input[i]
+      output[int(i/12)] = input[i]
     elif cumulativ == 1:
-      output[i/12] += input[i]
+      output[int(i/12)] += input[i]
 
   if(rate == 1):
     output = output/12.
@@ -127,7 +127,7 @@ def read_reactor(hd, info):
 
   r_built = []
   r_deployed = []
-  r_retired = np.zeros(timestep)
+  r_retired = np.zeros(timestep, dtype=np.float64)
   r_power_E = []
   f_name  = []        #fuel
   for i in range(4):  #max 4 differents fuel
