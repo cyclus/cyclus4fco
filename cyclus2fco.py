@@ -90,9 +90,6 @@ def month2year(input, cumulativ, rate):
       output[int(i/12)] = input[i]
     elif cumulativ == 1:
       output[int(i/12)] += input[i]
-
-  if(rate == 1):
-    output = output/12.
   return output
 
 
