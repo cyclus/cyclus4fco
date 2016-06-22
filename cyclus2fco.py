@@ -196,8 +196,8 @@ def read_reactor(hd, info):
   #get fresh fuel intel
   for name in r_name:
     r_flow = []
-    cmd = "cyan -db cyclus.sqlite flow -to "
-    cmd += name
+    cmd = "cyan -db cyclus.sqlite flow "
+#    cmd += name
     for i in range(4):
       for f_names in f_name[i]:
         cmd2 = cmd
