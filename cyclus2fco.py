@@ -100,12 +100,24 @@ def recover_info(line):
   else :
     line_hd,line_def = line.split(' ',1)
     hd_id = line_hd[0:2]
-    if   hd_id == "RE" : read_reactor(line_hd, line_def)
-    elif hd_id == "RP" : read_reprocessing(line_hd, line_def)
-    elif hd_id == "CO" : read_cooling(line_hd, line_def)
-    elif hd_id == "WR" : read_waiting_repro(line_hd, line_def)
-    elif hd_id == "ST" : read_storage(line_hd, line_def)
-    elif hd_id == "WT" : read_waste(line_hd, line_def)
+    if   hd_id == "RE" : 
+      read_reactor(line_hd, line_def)
+      print( line, ": done!")
+    elif hd_id == "RP" : 
+      read_reprocessing(line_hd, line_def)
+      print( line, ": done!")
+    elif hd_id == "CO" : 
+      read_cooling(line_hd, line_def)
+      print( line, ": done!")
+    elif hd_id == "WR" : 
+      read_waiting_repro(line_hd, line_def)
+      print( line, ": done!")
+    elif hd_id == "ST" : 
+      read_storage(line_hd, line_def)
+      print( line, ": done!")
+    elif hd_id == "WT" : 
+      read_waste(line_hd, line_def)
+      print( line, ": done!")
     else : print("bad keyword in: ", line )
 
 
@@ -349,7 +361,7 @@ def read_storage(hd, info):
       st_inv = []
       for name in st_name:
         cmd = "cyan -db cyclus.sqlite inv "
-        st_inv += cyan(cmd + "-nucs=" + nucs_MA + " " + name)
+        st_inv += cyan(cmd + "-nucs=" + nucs_Pu + " " + name)
       st_inv = translate_info(st_inv, 2,timestep)
       st_inv_yearly = month2year(st_inv, 0, 0)/1000
       push_in_fco_excel(st_inv_yearly, r_sheet_storage, FCO_RU_storage_position, 6)
