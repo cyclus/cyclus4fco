@@ -1,0 +1,28 @@
+RE1 NA:LWR_A F1:UOX LT:960y CA:0.9 PO:1
+RE2 NA:LWR_B F2:UOX LT:960y CA:0.9 PO:1
+RE3 NA:SFR_A F3:SFR_fuel CA:0.9 PO:0.4
+RE4 NA:SFR_B F4:SFR_fuel CA:0.9 PO:0.4
+
+
+RP_R1_F1 NA:Separation CO:UOX_A_spent_stored
+RP_R2_F2 NA:Separation CO:UOX_B_spent_stored
+RP_R3_F3 NA:Separation CO:SFR_A_spent_stored
+RP_R4_F4 NA:Separation CO:SFR_B_spent_stored
+
+CO_R1_F1 LWR_A_cooling
+CO_R2_F2 LWR_B_cooling
+CO_R3_F3 SFR_A_cooling
+CO_R4_F4 SFR_B_cooling
+
+
+WR_R1_F1 LWR_A_storage
+WR_R2_F2 LWR_B_storage
+WR_R3_F3 SFR_A_storage
+WR_R4_F4 SFR_B_storage
+
+
+
+ST LWR_A_storage,LWR_B_storage,SFR_A_storage,SFR_B_storage
+ST_DU LWR_A_storage
+ST_RU LWR_A_storage
+WT waste

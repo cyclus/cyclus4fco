@@ -5,3 +5,7 @@ a.out
 *.tar.gz
 *.sw*
 *.dat
+~$*
+tt
+tt2
+test.xlsm
