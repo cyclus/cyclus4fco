@@ -1,13 +1,9 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 from __future__ import print_function, unicode_literals
-import xlwings as xw
 import os
 import sys
 import subprocess
-import io
 import numpy as np
-import re
-import openpyxl as xl
 
 import cymetric as cym
 global r_power_E
@@ -17,10 +13,11 @@ global c_inv
 global wr_inv
 global mass_conversion
 
-fco_sheet = ['Data-Front End', 'Data-Reactor', 'Data-Recycle', 'Data-Inventories', 'Data-Economics', 'Data-Wildcard', 'Graph_Data', 'Settings', 'Pres_Graphs', 'Graphs (C1-4)', 'Version Notes']
+fco_sheet = ['Data-Front End', 'Data-Reactor', 'Data-Recycle', 'Data-Inventories', 'Data-Economics',
+             'Data-Wildcard', 'Graph_Data', 'Settings', 'Pres_Graphs', 'Graphs (C1-4)', 'Version Notes']
 
-#Half-life > 1h
-nucs_Pu_list = [ "238pu", "239pu", "240pu", "241pu", "242pu"]
+# Half-life > 1h
+nucs_Pu_list = ["238pu", "239pu", "240pu", "241pu", "242pu"]
 
 nucs_U = "230U,231U,232U,233U,234U,235U,236U,237U,238U,240U"
 nucs_Pu = "234Pu,235Pu,236Pu,237Pu,238Pu,239Pu,240Pu,241Pu,242Pu,243Pu,244Pu,245Pu,246Pu,247Pu"
@@ -31,7 +28,6 @@ nucs_FP = "H3,GE74,AS75,GE76,SE77,SE78,SE79,SE80,BR81,SE82,KR82,KR83,KR84,KR85,R
 nucs_MA = nucs_Am + "," + nucs_Cm + "," + nucs_Np
 
 
-
 def push_in_excel(matrix, sheet, column, start_row):
     for i in range(len(matrix)):
         cmd = "sed 's/\(r=\"" + column + str(start_row + i)
@@ -40,104 +36,31 @@ def push_in_excel(matrix, sheet, column, start_row):
             sheet + " > _tmp/xl/worksheets/sheet_tmp.xml"
         os.system(cmd)
         os.system("mv _tmp/xl/worksheets/sheet_tmp.xml _tmp/xl/worksheets/" + sheet)
-	
+
+
 def save_xslm(filename):
     cmd = 'cd _tmp; zip -r ../' + filename + ' *'
     os.system(cmd + ' >/dev/null')
     cmd = 'rm -rf _tmp'
     os.system(cmd)
 
+
 def open_xslm(filename):
-    cmd = 'unzip ' + filename + ' -d _tmp/'
+    cmd = 'unzip -o ' + filename + ' -d _tmp/'
     output = subprocess.check_output(cmd.split())
 
-def write_exel(vals, xl_file, column, sheet, start_row):
-    open_xslm(xl_file)
-    push_in_excel(vals, sheet, column, start_row)
-    save_xslm(xs_file)
 
-
-
-def translate_info(input, size, lengh):
-  output = np.zeros(lengh, dtype=np.float64)
-  for couple in input:
-    output[int(couple[0])] += float(couple[1])
-  return output
-
-
-
-def month2year(input, cumulativ, rate):
-  lengh = len(input)
-  output = np.zeros(int(lengh/12), dtype=np.float64)
-  for i in range(lengh):
-    if i % 12 == 0:
-      output[int(i/12)] = input[i]
-    elif cumulativ == 1:
-      output[int(i/12)] += input[i]
-  return output
-
-
-
-def process(evaler, file):
-    
-  for line in file:
-    if line[0] = '#':
-        continue
-    else if line[0] != '%':
-        param val = line[1:].split(":",1)
-        if param == 'startrow':
-            startrow = int(val)
-        else if param = 'power':
-            time_conversion = foat(val)
-        else if param = 'mass':
-            mass_conversion = foat(val)
-        else if param = 'power':
-            power_conversion = foat(val)
-        else:
-            exec_line(evaler, line)
-
-def get_vals(evaler, param):
-    key = param[2]
-
-# clean empty parameters
-    for i in range(len(param))[3:]:
-        if param[i] == ['']: param[i][:] = []
-    fac1 = param[3]
-    fac2 = param[4]
-    nucs = param[5]
-
-    if key == "inv":
-        val = cytim.inventories(ev, facilities=fac1,nucs=nucs)
-        val = val['Mass'].copy() * mass_conversion
-    else if key == "trans":
-        val = cytim.transactions(ev, senders=fac1, receivers=fac2, nucs=nucs)
-        val = val['Mass'].copy() * mass_conversion
-    else if key == "power":
-        val = cytim.get_power(evaler, facilities=fac1)
-        val = power['Value'].copy() * power_conversion 
-    else if kay = "time":
-        val = evaler.eval('TimeList').copy() * time_conversion
-
-    return val.tolist()
-  
-
-def exec_line(evaler, line):
-    param = line.split(':',1)
-    vals = get_val(evaler, param)
-    write_exel(vals, param[0], param[1], start_row)
-
-
-def month2year(val, mode=0, division=12):
+def month2year(vals, mode=0, division=12):
     out_val = []
     val = 0
-    for i  in (range(len(vals)):
+    for i in range(len(vals)):
         if mode == 0:
             val = vals[i]
         else:
             val += vals[i]
-        if index % division == 0:
+        if i % division == 0:
             if mode == 2:
-                val *= 1./double(division)
+                val *= 1. / double(division)
             out_val.append(val)
             val = 0
     return out_val
@@ -145,25 +68,105 @@ def month2year(val, mode=0, division=12):
 
 def get_timestep():
     timestep = get_val(ev, ['time'])
-    timestep = month2year(timestep, 0)/12. 
+    timestep = month2year(timestep, 0) / 12.
     return timestep
 
 
+def get_val(evaler, param):
+    key = param[2]
+    # clean empty parameters
+    for i in range(len(param))[3:]:
+        param[i] = param[i].split(',')
+        if param[i] == ['']:
+            param[i][:] = []
+    fac1 = param[3]
+    fac2 = param[4]
+    commods = param[5]
+    nucs = param[6]
+    if key == "inv":
+        val = cym.timeseries.inventories(evaler, facilities=fac1, nucs=nucs)
+        val = val['Mass'].copy() / mass_conversion
+        val = month2year(val.tolist(), 0, time_conversion)
+    elif key == "trans":
+        val = cym.timeseries.transactions(evaler, senders=fac1, receivers=fac2,
+                commodities=commods, nucs=nucs)
+        val = val['Mass'].copy() / mass_conversion
+        val = month2year(val.tolist(), 1, time_conversion)
+    elif key == "power":
+        val = cym.timeseries.get_power(evaler, facilities=fac1)
+        val = val['Value'].copy() / power_conversion
+        val = month2year(val.tolist(), 0, time_conversion)
+    elif key == "time":
+        val = evaler.eval('TimeList').copy() / time_conversion
+        val = val['Time'].tolist()
+        val = month2year(val, 0, time_conversion)
+
+    return val
+
+
+def exec_line(evaler, line):
+    param = line.split(':')
+    if len(param) != 7:
+        print("Bad line: ", line)
+        quit()
+    vals = get_val(evaler, param)
+    push_in_excel(vals, param[0], param[1], start_row)
+
+
+def process(evaler, file):
+    global start_row
+    global time_conversion
+    global mass_conversion
+    global power_conversion
+    template = 'template.xls'
+    outfile = 'outffile.xls'
+    time_conversion = 1.
+    mass_conversion = 1.
+    power_conversion = 1.
+    for line in file:
+        line = line.rstrip('\r\n')
+        if len(line) != 0:
+            if line[0] == '%':
+                param, val = line[1:].split(":", 1)
+                if param == 'template':
+                    template = val
+                elif param == 'outfile':
+                    outfile = val
+                elif param == 'startrow':
+                    start_row = int(val)
+                elif param == 'time':
+                    time_conversion = float(val)
+                elif param == 'mass':
+                    mass_conversion = float(val)
+                elif param == 'power':
+                    power_conversion = float(val)
+    open_xslm(template)
+    for line in file:
+        line = line.rstrip('\r\n')
+        if len(line) != 0:
+            if line[0] != '%' and line[0] != '#':
+                exec_line(evaler, line)
+    save_xslm(outfile)
+
+def read_input(input):
+    f = open(input, 'r')
+    matrix = []
+    for line in f:
+        matrix.append(line)
+    return matrix
+
 
 def main():
-  global timestep
-  if len(sys.argv) != 2 :
-    print("missing argument !!")
-    quit()
+    global timestep
+    if len(sys.argv) != 3:
+        print("missing argument !!")
+        quit()
 
-  input_list = read_input(sys.argv[1])
-  process(input_list)
-
-#built_infotable()
-
-
+    db = cym.dbopen(sys.argv[2])
+    ev = cym.Evaluator(db=db, write=False)
+    input_list = read_input(sys.argv[1])
+    process(ev, input_list)
 
 
-
-
-main()
+if __name__ == '__main__':
+    main()

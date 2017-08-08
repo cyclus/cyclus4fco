@@ -1,99 +1,15 @@
 # Sheet Column kind facilities nucs
+%template:EmptyFCO_Output.xlsm
+%outfile:Output_.xlsm
 %startrow:6
-%mass:k
-%time:year
-%power:G
-Data-Reactor:C:trans:names1:names2:nucs 
+%mass:1000
+%time:12
+%power:1000000000
+sheet1.xml:C:trans::pwr::
+sheet1.xml:D:inv:pwr:::
+sheet1.xml:E:inv:pwr:::238U
+sheet1.xml:F:power::::
+sheet1.xml:H:inv:pwr2:::
+sheet1.xml:I:time::::
 
 
-RE1 NA:LWR_A F1:UOX LT:960y CA:0.9 PO:1
-RE2 NA:LWR_B F2:UOX LT:960y CA:0.9 PO:1
-RE3 NA:SFR_A F3:SFR_fuel CA:0.9 PO:0.4
-RE4 NA:SFR_B F4:SFR_fuel CA:0.9 PO:0.4
-
-
-RP_R1_F1 NA:Separation CO:UOX_A_spent_stored
-RP_R2_F2 NA:Separation CO:UOX_B_spent_stored
-RP_R3_F3 NA:Separation CO:SFR_A_spent_stored
-RP_R4_F4 NA:Separation CO:SFR_B_spent_stored
-
-CO_R1_F1 LWR_A_cooling
-CO_R2_F2 LWR_B_cooling
-CO_R3_F3 SFR_A_cooling
-CO_R4_F4 SFR_B_cooling
-
-
-WR_R1_F1 LWR_A_storage
-WR_R2_F2 LWR_B_storage
-WR_R3_F3 SFR_A_storage
-WR_R4_F4 SFR_B_storage
-
-
-
-ST LWR_A_storage,LWR_B_storage,SFR_A_storage,SFR_B_storage
-ST_DU LWR_A_storage
-ST_RU LWR_A_storage
-WT waste
-
-def read_reactor(hd, info):
-
-  r_sheet = 'sheet2.xml'
-  FCO_reactor_E_position = [ 'C', 'H', 'M', 'R']
-  FCO_reactor_I_position = [ 'AD', 'AI', 'AN', 'AS']
-  FCO_reactor_B_position = [ 'AY', 'BD', 'BI', 'BN']
-  FCO_reactor_R_position = [ 'BT', 'BY', 'CD', 'CI']
-  r_sheet_flows = 'sheet1.xml'
-  FCO_reactor_LR_position = [[ 'CQ', 'CV', 'DA', 'DF'],
-                             [ 'DK', 'DP', 'DU', 'DZ'],
-                             [ 'EE', 'EJ', 'EO', 'ET'],
-                             [ 'EY', 'FD', 'FI', 'FN']]
-
-
-
-
-
-def read_reprocessing(hd, info):
-
-  FCO_separation_position = [[ 'FI', 'FN', 'FS', 'FX'],
-                             [ 'GC', 'GH', 'GM', 'GR'],
-                             [ 'GW', 'HB', 'HG', 'HL'],
-                             [ 'HQ', 'HV', 'IA', 'IF']]
-  r_sheet_sepatation = 'sheet3.xml'
-  push_in_fco_excel(rp_inv_yearly, r_sheet_sepatation, FCO_separation_position[r_id][f_id], 6)
-
-
-
-def read_waiting_repro(hd, info):
-
-  FCO_waiting_position = [[ 'CF', 'CK', 'CP', 'CU'],
-                          [ 'CZ', 'DE', 'DJ', 'DO'],
-                          [ 'DT', 'DY', 'ED', 'EI'],
-                          [ 'EN', 'ES', 'EX', 'FC']]
-  r_sheet_waiting = 'sheet4.xml'
-  push_in_fco_excel(wr_inv_yearly, r_sheet_waiting, FCO_waiting_position[r_id][f_id], 6)
-
-
-
-def read_cooling(hd, info):
-  FCO_cooling_position = [[ 'C', 'H', 'M', 'R'],
-                          [ 'W', 'AB', 'AG', 'AL'],
-                          [ 'AQ', 'AV', 'BA', 'BF'],
-                          [ 'BK', 'BP', 'BU', 'BZ']]
-  r_sheet_cooling = 'sheet4.xml'
-
-
-def read_storage(hd, info):
-  # filling order is U Pu MA FP
-  nucs_name = [ nucs_Pu, nucs_MA ]
-
-  FCO_PUMA_storage_position = ['FI', 'FN']
-  FCO_storage_pu_position = ['GD', 'GI', 'GN', 'GS', 'GX']
-  r_sheet_storage = 'sheet4.xml'
-
-
-
-
-def read_waste(hd, info):
-  nucs_name = [ nucs_U, nucs_Pu, nucs_MA, nucs_FP]
-  FCO_waste_position = ['HD', 'HI', 'HN', 'HS']
-  r_sheet_waste = 'sheet4.xml'
