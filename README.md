@@ -24,9 +24,9 @@ The script input file needs to be format as follow:
    timestep list, `power` for the power timeserie, `trans` for transaction, and
    `inv` for the inventory. When requesting power or time,
    facilities/commodities/nuclides information are not use. When requesting
-   inventory only the first FAC1 and NUC are read as a list a facilities and a
-   list of nuclides, respectively. When requestion transaction, the FAC1 list
-   corresponds to the senders, FAC2 to the receivers facilities, and COM to the
+   inventory only the first FAC_A and NUC are read as a list a facilities and a
+   list of nuclides, respectively. When requestion transaction, the FAC_A list
+   corresponds to the senders, FAC_B to the receivers facilities, and COM to the
    commodities.
    The item separator in the list is the `,`.
    Some example of input file can be found in [input_example](input_example).
