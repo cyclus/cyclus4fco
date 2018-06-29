@@ -19,9 +19,10 @@ The script input file needs to be format as follow:
  - the second part lists each information that will be written in the XLS
    file, each line needs to be formatted as:
    `sheetX.xml:COL:INTEL:FAC_A1,FAC_A2,...:FAC_B1,FAC_B2,...:COM_1,COM_2,...:NUC_1,NUC_2...`,
-   where X needs to be replaced with the sheet number, CAL by a column name
-   (A,B,... AZ ...), INTEL by the information to recover, `time` for the
-   timestep list, `power` for the power timeserie, `trans` for transaction, and
+   where :
+     - X needs to be replaced with the sheet number,
+     - CAL by a column name (A,B,... AZ ...),
+     - INTEL by the information to recover, `time` for the timestep list, `power` for the power timeserie, `trans` for transaction, and
    `inv` for the inventory. 
    
    When requesting power or time,
