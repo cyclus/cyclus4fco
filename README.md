@@ -16,13 +16,15 @@ The script input file needs to be format as follow:
     - time conversion factor, using `%time:`
     - power conversion factor, using `%power:`
 
- - the second part list each information that will be written in the XLS
-   file, each line need to be formatted as:
+ - the second part lists each information that will be written in the XLS
+   file, each line needs to be formatted as:
    `sheetX.xml:COL:INTEL:FAC_A1,FAC_A2,...:FAC_B1,FAC_B2,...:COM_1,COM_2,...:NUC_1,NUC_2...`,
-   where X need to be replaced with the sheet number. CAL by a column name
+   where X needs to be replaced with the sheet number, CAL by a column name
    (A,B,... AZ ...), INTEL by the information to recover, `time` for the
    timestep list, `power` for the power timeserie, `trans` for transaction, and
-   `inv` for the inventory. When requesting power or time,
+   `inv` for the inventory. 
+   
+   When requesting power or time,
    facilities/commodities/nuclides information are not use. When requesting
    inventory only the first FAC_A and NUC are read as a list a facilities and a
    list of nuclides, respectively. When requestion transaction, the FAC_A list
