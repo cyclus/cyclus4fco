@@ -24,9 +24,7 @@ The script input file needs to be format as follow:
      - CAL by a column name (A,B,... AZ ...),
      - INTEL by the information to recover, `time` for the timestep list, `power` for the power timeserie, `trans` for transaction, and
    `inv` for the inventory. 
-   
-   When requesting power or time,
-   facilities/commodities/nuclides information are not use. When requesting
+   When requesting power or time, facilities/commodities/nuclides information are not use. When requesting
    inventory only the first FAC_A and NUC are read as a list a facilities and a
    list of nuclides, respectively. When requestion transaction, the FAC_A list
    corresponds to the senders, FAC_B to the receivers facilities, and COM to the
