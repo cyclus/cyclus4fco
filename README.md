@@ -29,5 +29,5 @@ The script input file needs to be format as follow:
    corresponds to the senders, FAC2 to the receivers facilities, and COM to the
    commodities.
    The item separator in the list is the `,`.
-   Some example of input file can be found in [input_example](input_exemple).
+   Some example of input file can be found in [input_example](input_example).
 
